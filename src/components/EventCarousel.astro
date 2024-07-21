@@ -47,9 +47,9 @@ const { title, cards } = Astro.props as CarouselProps;
 
 <script>
   const updateCarousel = () => {
-    const carousel = document.getElementById("event-carousel");
-    const prevBtn = document.getElementById("event-prevBtn");
-    const nextBtn = document.getElementById("event-nextBtn");
+    const carousel = document.getElementById("event-carousel")!;
+    const prevBtn = document.getElementById("event-prevBtn")!;
+    const nextBtn = document.getElementById("event-nextBtn")!;
     const cardCount = Number(carousel?.dataset["cards"]);
     const cardWidth = carousel!.firstElementChild!.clientWidth;
     const visibleCards = Math.floor(carousel!.clientWidth / cardWidth);
