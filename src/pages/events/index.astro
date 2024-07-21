@@ -1,0 +1,56 @@
+---
+import Layout from "../../layouts/Layout.astro";
+
+let data = await fetch(`${import.meta.env.GRAPHQL_ENDPOINT}`, {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({
+    query: `
+      {
+        posts(where: {categoryName: "meetups"}) {
+            nodes {
+              id: databaseId
+              slug
+              title(format: RENDERED)
+            }
+        }
+      }
+    `,
+  }),
+});
+
+interface PostStructure {
+  id: number;
+  slug: string;
+  title: string;
+}
+
+let posts = await data.json();
+let postList = posts.data.posts.nodes;
+
+console.log(postList);
+---
+
+<Layout title="Blog">
+  <section>
+    <h1 class="text-center">Blog posts</h1>
+    {
+      !postList ||
+        (postList.length == 0 && (
+          <main>
+            <h2>No blog posts yet.</h2>
+          </main>
+        ))
+    }
+    {
+      postList &&
+        postList.map((post: PostStructure) => (
+          <article>
+            <h2>
+              <a href={`/events/${post.slug}/`} set:html={post.title} />
+            </h2>
+          </article>
+        ))
+    }
+  </section>
+</Layout>

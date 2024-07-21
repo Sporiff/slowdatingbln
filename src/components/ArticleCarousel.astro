@@ -1,0 +1,62 @@
+---
+import Card from "./Card.astro";
+import type { CardProps } from "./Card.astro";
+
+interface CarouselProps {
+  title: string;
+  cards: CardProps[];
+}
+
+const { title, cards } = Astro.props as CarouselProps;
+---
+
+<div class="relative overflow-hidden my-4 w-10/12 mx-auto">
+  <h2 class="my-2 text-white text-xl font-bold">{title}</h2>
+  <div
+    id="article-carousel"
+    class="flex transition-transform duration-500 ease-in-out gap-x-4"
+    data-cards={cards.length}
+  >
+    {
+      cards.map((card) => (
+        <div class="xs:min-w-[calc(100%-1rem)] md:min-w-[calc(33.3333%-1rem)] flex-shrink-0">
+          <Card {...card} />
+        </div>
+      ))
+    }
+  </div>
+  <button
+    id="article-prevBtn"
+    class="absolute left-0 top-1/2 transform -translate-y-1/2 bg-white p-2 shadow-lg"
+    >Prev</button
+  >
+  <button
+    id="article-nextBtn"
+    class="absolute right-0 top-1/2 transform -translate-y-1/2 bg-white p-2 shadow-lg"
+    >Next</button
+  >
+</div>
+
+<script>
+  let currentIndex = 0;
+  const carousel = document.getElementById("article-carousel");
+  const cardCount = Number(carousel?.dataset["cards"]);
+
+  const updateCarousel = () => {
+    carousel!.style.transform = `translateX(-${currentIndex * 33.3333}%)`;
+  };
+
+  document.getElementById("article-prevBtn")!.addEventListener("click", () => {
+    if (currentIndex > 0) {
+      currentIndex--;
+      updateCarousel();
+    }
+  });
+
+  document.getElementById("article-nextBtn")!.addEventListener("click", () => {
+    if (currentIndex < cardCount - 3) {
+      currentIndex++;
+      updateCarousel();
+    }
+  });
+</script>

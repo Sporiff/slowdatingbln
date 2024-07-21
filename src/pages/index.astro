@@ -1,0 +1,144 @@
+---
+import Layout from "../layouts/Layout.astro";
+import ArticleCarousel from "../components/ArticleCarousel.astro";
+import EventCarousel from "../components/EventCarousel.astro";
+import type { CardProps } from "../components/Card.astro";
+
+interface ApiResponse {
+  id: number;
+  slug: string;
+  title: string;
+  featuredImage: {
+    node: {
+      mediaItemUrl: string;
+      mediaDetails: {
+        height: number;
+        width: number;
+      };
+    };
+  };
+}
+
+const mapApiResponseToCardProps = (apiResponse: ApiResponse[]): CardProps[] => {
+  return apiResponse.map((response) => ({
+    imageSrc: response.featuredImage.node.mediaItemUrl,
+    heading: response.title,
+    body: response.title,
+    href: `/events/${response.slug}`,
+    date: new Date().toISOString(),
+  }));
+};
+
+const meetupData = await fetch(`${import.meta.env.GRAPHQL_ENDPOINT}`, {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({
+    query: `
+      {
+      posts(where: {categoryName: "meetups"}) {
+        nodes {
+          id: databaseId
+          slug
+          title(format: RENDERED)
+          featuredImage {
+            node {
+              mediaItemUrl
+              mediaDetails {
+                height
+                width
+              }
+            }
+          }
+        }
+      }
+      }
+    `,
+  }),
+});
+
+const blogData = await fetch(`${import.meta.env.GRAPHQL_ENDPOINT}`, {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({
+    query: `
+      {
+      posts(where: {categoryName: "blog"}) {
+        nodes {
+          id: databaseId
+          slug
+          title(format: RENDERED)
+          featuredImage {
+            node {
+              mediaItemUrl
+              mediaDetails {
+                height
+                width
+              }
+            }
+          }
+        }
+      }
+      }
+    `,
+  }),
+});
+
+const meetupJson = await meetupData.json();
+const meetupPosts = meetupJson.data.posts.nodes;
+const meetupCards = mapApiResponseToCardProps(meetupPosts);
+
+const blogJson = await blogData.json();
+const blogPosts = blogJson.data.posts.nodes;
+const blogCards = mapApiResponseToCardProps(blogPosts);
+const fauxCards = [
+  {
+    imageSrc:
+      "https://wordpress.slowdatingbln.com/wp-content/uploads/2024/07/slow-dating-5.webp",
+    heading: "Slow Dating Event #1: Picnic & Games in the Park",
+    body: "Slow Dating Event #1: Picnic & Games in the Park",
+    href: "/events/slow-dating-event-1-picnic-games-in-the-park",
+    date: "2024-07-21T14:24:10.840Z",
+    width: 300,
+    height: 300,
+  },
+  {
+    imageSrc:
+      "https://wordpress.slowdatingbln.com/wp-content/uploads/2024/07/slow-dating-5.webp",
+    heading: "Slow Dating Event #1: Picnic & Games in the Park",
+    body: "Slow Dating Event #1: Picnic & Games in the Park",
+    href: "/events/slow-dating-event-1-picnic-games-in-the-park",
+    date: "2024-07-21T14:24:10.840Z",
+    width: 300,
+    height: 300,
+  },
+  {
+    imageSrc:
+      "https://wordpress.slowdatingbln.com/wp-content/uploads/2024/07/slow-dating-5.webp",
+    heading: "Slow Dating Event #1: Picnic & Games in the Park",
+    body: "Slow Dating Event #1: Picnic & Games in the Park",
+    href: "/events/slow-dating-event-1-picnic-games-in-the-park",
+    date: "2024-07-21T14:24:10.840Z",
+    width: 300,
+    height: 300,
+  },
+  {
+    imageSrc:
+      "https://wordpress.slowdatingbln.com/wp-content/uploads/2024/07/slow-dating-5.webp",
+    heading: "Slow Dating Event #1: Picnic & Games in the Park",
+    body: "Slow Dating Event #1: Picnic & Games in the Park",
+    href: "/events/slow-dating-event-1-picnic-games-in-the-park",
+    date: "2024-07-21T14:24:10.840Z",
+    width: 300,
+    height: 300,
+  },
+];
+---
+
+<Layout title="Slow dating Berlin" prose={false}>
+  {fauxCards.length > 0 && <EventCarousel title="Events" cards={fauxCards} />}
+  {
+    blogCards.length > 0 && (
+      <ArticleCarousel title="Blog posts" cards={blogCards} />
+    )
+  }
+</Layout>

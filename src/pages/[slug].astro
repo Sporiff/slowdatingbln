@@ -1,0 +1,85 @@
+---
+import Layout from "../layouts/Layout.astro";
+import { Image } from "astro:assets";
+
+const { slug } = Astro.params;
+
+const response = await fetch(`${import.meta.env.GRAPHQL_ENDPOINT}`, {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({
+    query: `
+      {
+        page(id: "/${slug}/", idType: URI) {
+          title
+          content(format: RENDERED)
+          featuredImage {
+            node {
+              sourceUrl
+              altText
+              mediaDetails {
+                width
+                height
+              }
+            }
+          }
+        }
+      }
+   `,
+  }),
+});
+
+export async function getStaticPaths() {
+  let data = await fetch(`${import.meta.env.GRAPHQL_ENDPOINT}`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      query: `
+        {
+          pages {
+              nodes {
+                id: databaseId
+                slug
+                title(format:RENDERED)
+              }
+          }
+        }
+      `,
+    }),
+  });
+  let pages = await data.json();
+  let pageList = pages.data.pages.nodes;
+
+  return pageList.map((post: any) => ({
+    params: { slug: post.slug },
+    props: { post: post },
+  }));
+}
+
+const json = await response.json();
+const { page } = json.data;
+const { featuredImage } = page;
+const { width, height } = page;
+---
+
+<Layout title={page.title}>
+  <div class="w-full flex items-center justify-center">
+    <section
+      class="bg-white bg-opacity-50 p-10 prose lg:prose-xl prose-a:text-blue-700"
+    >
+      <h1 class="text-center" set:html={page.title} />
+      {
+        featuredImage && (
+          <Image
+            alt={featuredImage.node.altText}
+            src={featuredImage.node.sourceUrl}
+            class="mx-auto"
+            width={width}
+            height={height}
+          />
+        )
+      }
+      <Fragment set:html={page.content} />
+    </section>
+  </div>
+</Layout>

@@ -1,0 +1,65 @@
+---
+import Navbar from "../components/Navbar.astro";
+import Banner from "../components/Banner.astro";
+import "../styles/tailwind.css";
+
+let data = await fetch(`${import.meta.env.GRAPHQL_ENDPOINT}`, {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({
+    query: `
+      {
+        pages {
+            nodes {
+              id: databaseId
+              slug
+              title(format:RENDERED)
+            }
+        }
+      }
+    `,
+  }),
+});
+
+const pages = await data.json();
+const pageList = pages.data.pages.nodes;
+
+interface Props {
+  title: string;
+  prose?: boolean;
+}
+
+const { title, prose = "true" } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="description" content="Astro description" />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{title}</title>
+  </head>
+  <body class="bg-gradient-to-r from-blue-600 to-fuchsia-400 font-poppins">
+    <Banner title="Slow Dating Berlin" />
+    <nav>
+      <Navbar pages={pageList} />
+    </nav>
+    {
+      prose && (
+        <main class="container prose prose-stone lg:prose-xl mx-auto">
+          <slot />
+        </main>
+      )
+    }
+    {
+      !prose && (
+        <main>
+          <slot />
+        </main>
+      )
+    }
+  </body>
+</html>

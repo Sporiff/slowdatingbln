@@ -1,0 +1,93 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import { Image } from "astro:assets";
+
+const { slug } = Astro.params;
+
+let response = await fetch(`${import.meta.env.GRAPHQL_ENDPOINT}`, {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({
+    query: `
+      {
+         post(id: "${slug}", idType: SLUG) {
+            author {
+               node {
+                  avatar {
+                     url
+                  }
+                  email
+                  name
+               }
+            }
+            content(format: RENDERED)
+            featuredImage {
+               node {
+                  altText
+                  sourceUrl
+                  mediaDetails {
+                    width
+                    height
+                  }
+               }
+            }
+            title(format: RENDERED)
+         }
+      }
+   `,
+  }),
+});
+
+export async function getStaticPaths() {
+  let data = await fetch(`${import.meta.env.GRAPHQL_ENDPOINT}`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      query: `
+         {
+            posts(where: {categoryName: "meetups"}) {
+               nodes {
+                  id: databaseId
+                  slug
+                  title(format: RENDERED)
+               }
+            }
+         }
+      `,
+    }),
+  });
+  let posts = await data.json();
+  let postList = posts.data.posts.nodes;
+
+  return postList.map((post: any) => ({
+    params: { slug: post.slug },
+    props: { post: post },
+  }));
+}
+
+const post = await response.json();
+const postData = post.data.post;
+const { featuredImage } = postData;
+---
+
+<Layout title={postData.title}>
+  <div class="w-full flex items-center justify-center">
+    <article
+      class="bg-white bg-opacity-50 p-10 prose lg:prose-xl prose-a:text-blue-700"
+    >
+      <h1 class="text-center" set:html={postData.title} />
+      {
+        featuredImage && (
+          <Image
+            alt={featuredImage.node.altText}
+            src={featuredImage.node.sourceUrl}
+            class="mx-auto"
+            width={featuredImage.node.mediaDetails.width}
+            height={featuredImage.node.mediaDetails.height}
+          />
+        )
+      }
+      <Fragment set:html={postData.content} />
+    </article>
+  </div>
+</Layout>

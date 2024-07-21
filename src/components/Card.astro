@@ -1,0 +1,40 @@
+---
+import { Image } from "astro:assets";
+
+export interface CardProps {
+  imageSrc: string;
+  heading: string;
+  body: string;
+  href: string;
+  date: string;
+  height: number;
+  width: number;
+}
+
+const {
+  imageSrc,
+  href,
+  heading,
+  body,
+  date,
+  width = 300,
+  height = 300,
+} = Astro.props as CardProps;
+---
+
+<a href={href} class="block w-full" style={`max-width: ${width}px`}>
+  <div class="bg-white rounded-lg overflow-hidden">
+    <Image
+      src={imageSrc}
+      alt={heading}
+      width={width}
+      height={height}
+      loading="eager"
+    />
+    <div class="p-4">
+      <h3 class="text-lg font-semibold">{heading}</h3>
+      <p class="text-gray-500 text-sm">{date}</p>
+      <p class="text-gray-500 mt-2">{body}</p>
+    </div>
+  </div>
+</a>

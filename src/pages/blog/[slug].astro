@@ -1,0 +1,74 @@
+---
+import Layout from "../../layouts/Layout.astro";
+
+const { slug } = Astro.params;
+
+let response = await fetch(`${import.meta.env.GRAPHQL_ENDPOINT}`, {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({
+    query: `
+      {
+         post(id: "${slug}", idType: SLUG) {
+            author {
+               node {
+                  avatar {
+                     url
+                  }
+                  email
+                  name
+               }
+            }
+            content(format: RENDERED)
+            featuredImage {
+               node {
+                  altText
+                  sourceUrl
+               }
+            }
+            title(format: RENDERED)
+         }
+      }
+   `,
+  }),
+});
+
+let post = await response.json();
+let postData = post.data.post;
+
+export async function getStaticPaths() {
+  let data = await fetch(`${import.meta.env.GRAPHQL_ENDPOINT}`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      query: `
+         {
+            posts(where: {categoryName: "blog"}) {
+               nodes {
+                  id: databaseId
+                  slug
+                  title(format: RENDERED)
+               }
+            }
+         }
+      `,
+    }),
+  });
+  let posts = await data.json();
+  let postList = posts.data.posts.nodes;
+
+  return postList.map((post: any) => ({
+    params: { slug: post.slug },
+    props: { post: post },
+  }));
+}
+---
+
+<Layout title={postData.title}>
+  <article
+    class="bg-white bg-opacity-50 p-10 prose lg:prose-xl prose-a:text-blue-700"
+  >
+    <h1 class="text-center" set:html={postData.title} />
+    <Fragment set:html={postData.content} />
+  </article>
+</Layout>
