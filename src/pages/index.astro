@@ -10,10 +10,14 @@ interface ApiResponse {
   title: string;
   featuredImage: {
     node: {
-      mediaItemUrl: string;
       mediaDetails: {
-        height: number;
-        width: number;
+        sizes: [
+          {
+            height: number;
+            width: number;
+            sourceUrl: string;
+          },
+        ];
       };
     };
   };
@@ -21,13 +25,13 @@ interface ApiResponse {
 
 const mapApiResponseToCardProps = (apiResponse: ApiResponse[]): CardProps[] => {
   return apiResponse.map((response) => ({
-    imageSrc: response.featuredImage.node.mediaItemUrl,
+    imageSrc: response.featuredImage.node.mediaDetails.sizes[0].sourceUrl,
     heading: response.title,
     body: response.title,
     href: `/events/${response.slug}`,
     date: new Date().toISOString(),
-    height: response.featuredImage.node.mediaDetails.height,
-    width: response.featuredImage.node.mediaDetails.width,
+    height: response.featuredImage.node.mediaDetails.sizes[0].height,
+    width: response.featuredImage.node.mediaDetails.sizes[0].width,
   }));
 };
 
@@ -36,7 +40,7 @@ const meetupData = await fetch(`${import.meta.env.GRAPHQL_ENDPOINT}`, {
   headers: { "Content-Type": "application/json" },
   body: JSON.stringify({
     query: `
-      {
+    {
       posts(where: {categoryName: "meetups"}) {
         nodes {
           id: databaseId
@@ -44,16 +48,18 @@ const meetupData = await fetch(`${import.meta.env.GRAPHQL_ENDPOINT}`, {
           title(format: RENDERED)
           featuredImage {
             node {
-              mediaItemUrl
               mediaDetails {
-                height
-                width
+                sizes(include: MEDIUM) {
+                  height
+                  width
+                  sourceUrl
+                }
               }
             }
           }
         }
       }
-      }
+    }
     `,
   }),
 });
