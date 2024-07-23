@@ -68,6 +68,15 @@ export async function getStaticPaths() {
 const post = await response.json();
 const postData = post.data.post;
 const { featuredImage } = postData;
+
+const imageWidth =
+  featuredImage.node.mediaDetails.width < 512
+    ? featuredImage.node.mediaDetails.width
+    : 512;
+const imageHeight =
+  featuredImage.node.mediaDetails.height < 512
+    ? featuredImage.node.mediaDetails.height
+    : 512;
 ---
 
 <Layout title={postData.title}>
@@ -78,13 +87,15 @@ const { featuredImage } = postData;
       <h1 class="text-center" set:html={postData.title} />
       {
         featuredImage && (
-          <Image
-            alt={featuredImage.node.altText}
-            src={featuredImage.node.sourceUrl}
-            class="mx-auto"
-            width={featuredImage.node.mediaDetails.width}
-            height={featuredImage.node.mediaDetails.height}
-          />
+          <div class={`max-w-[${imageWidth}px]`}>
+            <Image
+              alt={featuredImage.node.altText}
+              src={featuredImage.node.sourceUrl}
+              class="mx-auto"
+              width={imageWidth}
+              height={imageHeight}
+            />
+          </div>
         )
       }
       <Fragment set:html={postData.content} />
