@@ -3,11 +3,16 @@ import Layout from "../layouts/Layout.astro";
 import ArticleCarousel from "../components/ArticleCarousel.astro";
 import EventCarousel from "../components/EventCarousel.astro";
 import type { CardProps } from "../components/Card.astro";
+import { postDateToDateString } from "../utils/postDateToDateString";
+import ContactForm from "../components/ContactForm.vue";
 
 interface ApiResponse {
   id: number;
   slug: string;
   title: string;
+  eventSettings?: {
+    eventDate?: string;
+  };
   featuredImage: {
     node: {
       mediaDetails: {
@@ -29,7 +34,9 @@ const mapApiResponseToCardProps = (apiResponse: ApiResponse[]): CardProps[] => {
     heading: response.title,
     body: response.title,
     href: `/events/${response.slug}`,
-    date: new Date().toISOString(),
+    date: response.eventSettings!.eventDate
+      ? postDateToDateString(response.eventSettings!.eventDate)
+      : "",
     height: response.featuredImage.node.mediaDetails.sizes[0].height,
     width: response.featuredImage.node.mediaDetails.sizes[0].width,
   }));
@@ -46,6 +53,9 @@ const meetupData = await fetch(`${import.meta.env.GRAPHQL_ENDPOINT}`, {
           id: databaseId
           slug
           title(format: RENDERED)
+          eventSettings {
+            eventDate
+          }
           featuredImage {
             node {
               mediaDetails {
@@ -108,7 +118,8 @@ const blogCards = mapApiResponseToCardProps(blogPosts);
   }
   {
     blogCards.length > 0 && (
-      <ArticleCarousel title="Blog posts" cards={blogCards} />
+      <ArticleCarousel title="News & Community" cards={blogCards} />
     )
   }
+  <ContactForm client:only="vue" endpoint={import.meta.env.GRAPHQL_ENDPOINT} />
 </Layout>

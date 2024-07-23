@@ -1,56 +1,50 @@
 ---
 import Layout from "../../layouts/Layout.astro";
+import PostCard from "../../components/PostCard.astro";
+import type { PostProps } from "../../components/PostCard.astro";
 
 let data = await fetch(`${import.meta.env.GRAPHQL_ENDPOINT}`, {
   method: "POST",
   headers: { "Content-Type": "application/json" },
   body: JSON.stringify({
     query: `
-      {
-        posts(where: {categoryName: "blog"}) {
-            nodes {
-              id: databaseId
-              slug
-              title(format: RENDERED)
+    {
+      posts(where: {categoryName: "blog"}) {
+        nodes {
+          id: databaseId
+          slug
+          title(format: RENDERED)
+          date
+          excerpt(format: RENDERED)
+          featuredImage {
+            node {
+              sourceUrl(size: MEDIUM)
             }
+          }
         }
       }
+    }
     `,
   }),
 });
 
-interface PostStructure {
-  id: number;
-  slug: string;
-  title: string;
-}
-
-let posts = await data.json();
-let postList = posts.data.posts.nodes;
+const posts = await data.json();
+const postList = posts.data.posts.nodes;
 ---
 
-<Layout title="Blog">
+<Layout title="News & Community">
   <section
-    class="bg-white bg-opacity-50 p-10 prose lg:prose-xl prose-a:text-blue-700"
+    class="p-10 prose lg:prose-xl prose-a:text-blue-700 prose-h1:text-4xl prose-h2:text-3xl"
   >
-    <h1 class="text-center">Blog posts</h1>
+    <h1 class="text-center text-white">News & Community</h1>
     {
       !postList ||
         (postList.length == 0 && (
           <main>
-            <h2>No blog posts yet.</h2>
+            <h2 class="text-center text-white">No news yet</h2>
           </main>
         ))
     }
-    {
-      postList &&
-        postList.map((post: PostStructure) => (
-          <article>
-            <h2>
-              <a href={`/blog/${post.slug}/`} set:html={post.title} />
-            </h2>
-          </article>
-        ))
-    }
+    {postList && postList.map((post: PostProps) => <PostCard post={post} />)}
   </section>
 </Layout>

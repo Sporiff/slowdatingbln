@@ -5,7 +5,14 @@ export default {
     fontFamily: {
       poppins: ["Poppins", "sans-serif"],
     },
-    extend: {},
+    extend: {
+      backgroundColor: {
+        themeColor: "#9392c7",
+      },
+      textColor: {
+        accent: "#F4C699",
+      },
+    },
   },
   plugins: [require("@tailwindcss/typography")],
 };

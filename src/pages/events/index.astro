@@ -1,39 +1,42 @@
 ---
 import Layout from "../../layouts/Layout.astro";
+import PostCard from "../../components/PostCard.astro";
+import type { PostProps } from "../../components/PostCard.astro";
 
 let data = await fetch(`${import.meta.env.GRAPHQL_ENDPOINT}`, {
   method: "POST",
   headers: { "Content-Type": "application/json" },
   body: JSON.stringify({
     query: `
-      {
-        posts(where: {categoryName: "meetups"}) {
-            nodes {
-              id: databaseId
-              slug
-              title(format: RENDERED)
+    {
+      posts(where: {categoryName: "meetups"}) {
+        nodes {
+          id: databaseId
+          slug
+          title(format: RENDERED)
+          date
+          excerpt(format: RENDERED)
+          featuredImage {
+            node {
+              sourceUrl(size: MEDIUM)
             }
+          }
         }
       }
+    }
     `,
   }),
 });
 
-interface PostStructure {
-  id: number;
-  slug: string;
-  title: string;
-}
-
-let posts = await data.json();
-let postList = posts.data.posts.nodes;
+const posts = await data.json();
+const postList = posts.data.posts.nodes;
 ---
 
 <Layout title="Events">
   <section
-    class="bg-white bg-opacity-50 p-10 prose lg:prose-xl prose-a:text-blue-700"
+    class="p-10 prose lg:prose-xl prose-a:text-blue-700 prose-h1:text-4xl"
   >
-    <h1 class="text-center">Events</h1>
+    <h1 class="text-center text-white">Events</h1>
     {
       !postList ||
         (postList.length == 0 && (
@@ -42,15 +45,6 @@ let postList = posts.data.posts.nodes;
           </main>
         ))
     }
-    {
-      postList &&
-        postList.map((post: PostStructure) => (
-          <article>
-            <h2>
-              <a href={`/events/${post.slug}/`} set:html={post.title} />
-            </h2>
-          </article>
-        ))
-    }
+    {postList && postList.map((post: PostProps) => <PostCard post={post} />)}
   </section>
 </Layout>

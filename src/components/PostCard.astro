@@ -1,0 +1,50 @@
+---
+import { postDateToDateString } from "../utils/postDateToDateString";
+
+export interface PostProps {
+  id: string;
+  slug: string;
+  title: string;
+  date: string;
+  excerpt: string;
+  featuredImage: {
+    node: {
+      sourceUrl: string;
+    };
+  };
+}
+
+interface Props {
+  post: PostProps;
+}
+
+const { post } = Astro.props;
+---
+
+<div class="max-w-sm w-full lg:max-w-full lg:flex mx-auto">
+  <div
+    class="h-[300px] lg:h-auto lg:w-[300px] flex-none bg-cover rounded-t lg:rounded-t-none lg:rounded-l text-center overflow-hidden"
+    style=`background-image: url(${post.featuredImage.node.sourceUrl})`
+    title=""
+  >
+  </div>
+  <div
+    class="border-r border-b border-l border-gray-400 lg:border-l-0 lg:border-t lg:border-gray-400 bg-white rounded-b lg:rounded-b-none lg:rounded-r p-4 flex flex-col justify-between leading-normal"
+  >
+    <div>
+      <a href={`/events/${post.slug}`}>
+        <div class="text-gray-900 font-bold text-xl mb-2">
+          {post.title}
+        </div>
+      </a>
+      <p class="text-gray-700 text-base no-underline" set:html={post.excerpt} />
+    </div>
+    <div class="flex items-center">
+      <div class="text-sm">
+        <p class="text-gray-600 leading-none">
+          {postDateToDateString(post.date)}
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
