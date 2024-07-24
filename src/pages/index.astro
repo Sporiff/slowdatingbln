@@ -2,44 +2,8 @@
 import Layout from "../layouts/Layout.astro";
 import ArticleCarousel from "../components/ArticleCarousel.astro";
 import EventCarousel from "../components/EventCarousel.astro";
-import type { CardProps } from "../components/Card.astro";
-import { postDateToDateString } from "../utils/postDateToDateString";
-
-interface ApiResponse {
-  id: number;
-  slug: string;
-  title: string;
-  eventSettings?: {
-    eventDate?: string;
-  };
-  featuredImage: {
-    node: {
-      mediaDetails: {
-        sizes: [
-          {
-            height: number;
-            width: number;
-            sourceUrl: string;
-          },
-        ];
-      };
-    };
-  };
-}
-
-const mapApiResponseToCardProps = (apiResponse: ApiResponse[]): CardProps[] => {
-  return apiResponse.map((response) => ({
-    imageSrc: response.featuredImage.node.mediaDetails.sizes[0].sourceUrl,
-    heading: response.title,
-    body: response.title,
-    href: `/events/${response.slug}`,
-    date: response.eventSettings!.eventDate
-      ? postDateToDateString(response.eventSettings!.eventDate)
-      : "",
-    height: response.featuredImage.node.mediaDetails.sizes[0].height,
-    width: response.featuredImage.node.mediaDetails.sizes[0].width,
-  }));
-};
+import { mapMeetupsToCards } from "../utils/mapMeetupsToCards";
+import { mapPostsToCards } from "../utils/mapPostsToCards";
 
 const meetupData = await fetch(`${import.meta.env.PUBLIC_GRAPHQL_ENDPOINT}`, {
   method: "POST",
@@ -84,12 +48,15 @@ const blogData = await fetch(`${import.meta.env.PUBLIC_GRAPHQL_ENDPOINT}`, {
           id: databaseId
           slug
           title(format: RENDERED)
+          date
           featuredImage {
             node {
-              mediaItemUrl
               mediaDetails {
-                height
-                width
+                sizes(include: MEDIUM) {
+                  height
+                  width
+                  sourceUrl
+                }
               }
             }
           }
@@ -102,11 +69,11 @@ const blogData = await fetch(`${import.meta.env.PUBLIC_GRAPHQL_ENDPOINT}`, {
 
 const meetupJson = await meetupData.json();
 const meetupPosts = meetupJson.data.posts.nodes;
-const meetupCards = mapApiResponseToCardProps(meetupPosts);
+const meetupCards = mapMeetupsToCards(meetupPosts);
 
 const blogJson = await blogData.json();
 const blogPosts = blogJson.data.posts.nodes;
-const blogCards = mapApiResponseToCardProps(blogPosts);
+const blogCards = mapPostsToCards(blogPosts);
 ---
 
 <Layout title="Slow dating Berlin">

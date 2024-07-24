@@ -18,7 +18,13 @@ let data = await fetch(`${import.meta.env.PUBLIC_GRAPHQL_ENDPOINT}`, {
           excerpt(format: RENDERED)
           featuredImage {
             node {
-              sourceUrl(size: MEDIUM)
+              mediaDetails {
+                sizes(include: MEDIUM) {
+                  height
+                  width
+                  sourceUrl
+                }
+              }
             }
           }
         }

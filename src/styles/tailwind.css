@@ -3,3 +3,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.prose figure {
+  @apply max-w-[80%] text-center mx-auto;
+}

@@ -5,10 +5,10 @@ export interface PostProps {
   id: string;
   slug: string;
   title: string;
-  date: string;
+  date?: string;
   excerpt: string;
-  eventSettings: {
-    eventDate: string;
+  eventSettings?: {
+    eventDate?: string;
   };
   featuredImage: {
     node: {
@@ -49,21 +49,50 @@ const { post } = Astro.props;
     </div>
   </div>
   <div>
-    <div class="flex items-center gap-x-4 text-xs">
-      <time
-        datetime=`postDateToDateString(${post.eventSettings.eventDate})`
-        class="text-gray-500 text-center sm:text-left"
-        >{postDateToDateString(post.eventSettings.eventDate)}</time
-      >
-    </div>
+    {
+      post.eventSettings?.eventDate && (
+        <div class="flex items-center gap-x-4 text-xs">
+          <time
+            datetime={postDateToDateString(post.eventSettings.eventDate)}
+            class="text-gray-500 text-center sm:text-left"
+          >
+            {postDateToDateString(post.eventSettings.eventDate)}
+          </time>
+        </div>
+      )
+    }
+    {
+      post.date && (
+        <div class="flex items-center gap-x-4 text-xs">
+          <time
+            datetime={postDateToDateString(post.date)}
+            class="text-gray-500 text-center sm:text-left"
+          >
+            {postDateToDateString(post.date)}
+          </time>
+        </div>
+      )
+    }
     <div class="group relative max-w-xl">
       <h3
         class="mt-3 text-lg font-semibold leading-6 text-gray-900 group-hover:text-gray-600"
       >
-        <a href=`/events/${post.slug}`>
-          <span class="absolute inset-0"></span>
-          {post.title}
-        </a>
+        {
+          post.eventSettings?.eventDate && (
+            <a href={"/events/" + post.slug}>
+              <span class="absolute inset-0" />
+              {post.title}
+            </a>
+          )
+        }
+        {
+          post.date && (
+            <a href={"/blog/" + post.slug}>
+              <span class="absolute inset-0" />
+              {post.title}
+            </a>
+          )
+        }
       </h3>
       <p class="mt-5 text-sm leading-6 text-gray-600" set:html={post.excerpt} />
     </div>
