@@ -3,7 +3,7 @@ import Layout from "../../layouts/Layout.astro";
 import PostCard from "../../components/PostCard.astro";
 import type { PostProps } from "../../components/PostCard.astro";
 
-let data = await fetch(`${import.meta.env.GRAPHQL_ENDPOINT}`, {
+let data = await fetch(`${import.meta.env.PUBLIC_GRAPHQL_ENDPOINT}`, {
   method: "POST",
   headers: { "Content-Type": "application/json" },
   body: JSON.stringify({
@@ -33,18 +33,32 @@ const postList = posts.data.posts.nodes;
 ---
 
 <Layout title="News & Community">
-  <section
-    class="p-10 prose lg:prose-xl prose-a:text-blue-700 prose-h1:text-4xl prose-h2:text-3xl"
+  <div
+    class="bg-white bg-opacity-50 px-6 py-4 sm:py-6 lg:px-8 rounded-xl mx-auto max-w-[65ch]"
   >
-    <h1 class="text-center text-white">News & Community</h1>
-    {
-      !postList ||
-        (postList.length == 0 && (
-          <main>
-            <h2 class="text-center text-white">No news yet</h2>
-          </main>
-        ))
-    }
-    {postList && postList.map((post: PostProps) => <PostCard post={post} />)}
-  </section>
+    <div class="mx-auto text-center">
+      <h2 class="text-4xl font-bold tracking-tight text-gray-900">
+        News & Community
+      </h2>
+      {
+        postList && postList.length > 0 && (
+          <p class="mt-6 text-lg leading-8 text-gray-700">
+            Catch up on what's been happening
+          </p>
+        )
+      }
+      {
+        !postList ||
+          (postList.length < 1 && (
+            <p class="mt-6 text-lg leading-8 text-gray-700">No posts yet</p>
+          ))
+      }
+      <div class="mt-16 space-y-20 lg:mt-20 lg:space-y-20">
+        {
+          postList &&
+            postList.map((post: PostProps) => <PostCard post={post} />)
+        }
+      </div>
+    </div>
+  </div>
 </Layout>

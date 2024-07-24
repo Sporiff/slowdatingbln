@@ -7,9 +7,20 @@ export interface PostProps {
   title: string;
   date: string;
   excerpt: string;
+  eventSettings: {
+    eventDate: string;
+  };
   featuredImage: {
     node: {
-      sourceUrl: string;
+      mediaDetails: {
+        sizes: [
+          {
+            height: number;
+            width: number;
+            sourceUrl: string;
+          },
+        ];
+      };
     };
   };
 }
@@ -21,30 +32,40 @@ interface Props {
 const { post } = Astro.props;
 ---
 
-<div class="max-w-sm w-full lg:max-w-full lg:flex mx-auto">
+<article class="relative isolate flex flex-col gap-8 lg:flex-row text-left">
   <div
-    class="h-[300px] lg:h-auto lg:w-[300px] flex-none bg-cover rounded-t lg:rounded-t-none lg:rounded-l text-center overflow-hidden"
-    style=`background-image: url(${post.featuredImage.node.sourceUrl})`
-    title=""
+    class="relative aspect-[16/9] sm:aspect-[2/1] lg:aspect-square lg:w-64 lg:shrink-0"
   >
+    <img
+      src={post.featuredImage.node.mediaDetails.sizes[0].sourceUrl}
+      alt=""
+      width={post.featuredImage.node.mediaDetails.sizes[0].width}
+      height={post.featuredImage.node.mediaDetails.sizes[0].height}
+      class="absolute inset-0 h-full w-full max-w-[300px] max-h-[300px] mx-auto rounded-2xl bg-gray-50 object-cover"
+    />
+    <div
+      class="absolute inset-0 rounded-2xl lg:ring-1 sm:ring-inset sm:ring-gray-900/10"
+    >
+    </div>
   </div>
-  <div
-    class="border-r border-b border-l border-gray-400 lg:border-l-0 lg:border-t lg:border-gray-400 bg-white rounded-b lg:rounded-b-none lg:rounded-r p-4 flex flex-col justify-between leading-normal"
-  >
-    <div>
-      <a href={`/events/${post.slug}`}>
-        <div class="text-gray-900 font-bold text-xl mb-2">
+  <div>
+    <div class="flex items-center gap-x-4 text-xs">
+      <time
+        datetime=`postDateToDateString(${post.eventSettings.eventDate})`
+        class="text-gray-500 text-center sm:text-left"
+        >{postDateToDateString(post.eventSettings.eventDate)}</time
+      >
+    </div>
+    <div class="group relative max-w-xl">
+      <h3
+        class="mt-3 text-lg font-semibold leading-6 text-gray-900 group-hover:text-gray-600"
+      >
+        <a href=`/events/${post.slug}`>
+          <span class="absolute inset-0"></span>
           {post.title}
-        </div>
-      </a>
-      <p class="text-gray-700 text-base no-underline" set:html={post.excerpt} />
-    </div>
-    <div class="flex items-center">
-      <div class="text-sm">
-        <p class="text-gray-600 leading-none">
-          {postDateToDateString(post.date)}
-        </p>
-      </div>
+        </a>
+      </h3>
+      <p class="mt-5 text-sm leading-6 text-gray-600" set:html={post.excerpt} />
     </div>
   </div>
-</div>
+</article>

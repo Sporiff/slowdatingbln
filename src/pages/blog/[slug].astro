@@ -4,7 +4,7 @@ import { Image } from "astro:assets";
 
 const { slug } = Astro.params;
 
-let response = await fetch(`${import.meta.env.GRAPHQL_ENDPOINT}`, {
+let response = await fetch(`${import.meta.env.PUBLIC_GRAPHQL_ENDPOINT}`, {
   method: "POST",
   headers: { "Content-Type": "application/json" },
   body: JSON.stringify({
@@ -35,7 +35,7 @@ let response = await fetch(`${import.meta.env.GRAPHQL_ENDPOINT}`, {
 });
 
 export async function getStaticPaths() {
-  let data = await fetch(`${import.meta.env.GRAPHQL_ENDPOINT}`, {
+  let data = await fetch(`${import.meta.env.PUBLIC_GRAPHQL_ENDPOINT}`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({

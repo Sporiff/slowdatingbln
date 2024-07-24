@@ -4,7 +4,7 @@ import { Image } from "astro:assets";
 
 const { slug } = Astro.params;
 
-let response = await fetch(`${import.meta.env.GRAPHQL_ENDPOINT}`, {
+let response = await fetch(`${import.meta.env.PUBLIC_GRAPHQL_ENDPOINT}`, {
   method: "POST",
   headers: { "Content-Type": "application/json" },
   body: JSON.stringify({
@@ -39,7 +39,7 @@ let response = await fetch(`${import.meta.env.GRAPHQL_ENDPOINT}`, {
 });
 
 export async function getStaticPaths() {
-  let data = await fetch(`${import.meta.env.GRAPHQL_ENDPOINT}`, {
+  let data = await fetch(`${import.meta.env.PUBLIC_GRAPHQL_ENDPOINT}`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
@@ -70,13 +70,13 @@ const postData = post.data.post;
 const { featuredImage } = postData;
 
 const imageWidth =
-  featuredImage.node.mediaDetails.width < 512
+  featuredImage.node.mediaDetails.width < 300
     ? featuredImage.node.mediaDetails.width
-    : 512;
+    : 300;
 const imageHeight =
-  featuredImage.node.mediaDetails.height < 512
+  featuredImage.node.mediaDetails.height < 300
     ? featuredImage.node.mediaDetails.height
-    : 512;
+    : 300;
 ---
 
 <Layout title={postData.title}>
@@ -87,7 +87,7 @@ const imageHeight =
       <h1 class="text-center" set:html={postData.title} />
       {
         featuredImage && (
-          <div class={`max-w-[${imageWidth}px]`}>
+          <div class={`max-w-[${imageWidth}px] mx-auto`}>
             <Image
               alt={featuredImage.node.altText}
               src={featuredImage.node.sourceUrl}

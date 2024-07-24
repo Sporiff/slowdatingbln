@@ -42,7 +42,7 @@ const mapApiResponseToCardProps = (apiResponse: ApiResponse[]): CardProps[] => {
   }));
 };
 
-const meetupData = await fetch(`${import.meta.env.GRAPHQL_ENDPOINT}`, {
+const meetupData = await fetch(`${import.meta.env.PUBLIC_GRAPHQL_ENDPOINT}`, {
   method: "POST",
   headers: { "Content-Type": "application/json" },
   body: JSON.stringify({
@@ -74,7 +74,7 @@ const meetupData = await fetch(`${import.meta.env.GRAPHQL_ENDPOINT}`, {
   }),
 });
 
-const blogData = await fetch(`${import.meta.env.GRAPHQL_ENDPOINT}`, {
+const blogData = await fetch(`${import.meta.env.PUBLIC_GRAPHQL_ENDPOINT}`, {
   method: "POST",
   headers: { "Content-Type": "application/json" },
   body: JSON.stringify({
@@ -121,5 +121,4 @@ const blogCards = mapApiResponseToCardProps(blogPosts);
       <ArticleCarousel title="News & Community" cards={blogCards} />
     )
   }
-  <ContactForm client:only="vue" endpoint={import.meta.env.GRAPHQL_ENDPOINT} />
 </Layout>

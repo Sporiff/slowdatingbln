@@ -1,0 +1,162 @@
+---
+import { Image } from "astro:assets";
+import heartImage from "../images/heart.png";
+
+interface Props {
+  pages: PageItem[];
+}
+
+const { pages } = Astro.props;
+---
+
+<header class="bg-themeColor">
+  <nav
+    class="flex items-start lg:items-center lg:flex-col p-6 lg:px-8"
+    aria-label="Global"
+  >
+    <div class="flex flex-1 justify-center mb-5 pl-6">
+      <a href="/" class="-m-1.5 p-1.5">
+        <span class="text-gray-100 text-2xl sm:text-3xl lg:text-5xl font-bold"
+          >Slow Dating Berlin</span
+        >
+        <Image
+          src={heartImage}
+          alt=""
+          width="45"
+          height="45"
+          class="w-auto h-8 lg:h-10 inline align-bottom"
+          loading="eager"
+        />
+      </a>
+    </div>
+    <div class="flex lg:hidden justify-end pt-1">
+      <button
+        type="button"
+        class="-m-2.5 rounded-md p-2.5 text-gray-100"
+        id="menu-button"
+      >
+        <span class="sr-only">Open main menu</span>
+        <svg
+          class="h-6 w-6"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke-width="1.5"
+          stroke="currentColor"
+          aria-hidden="true"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"></path>
+        </svg>
+      </button>
+    </div>
+    <div class="hidden lg:flex lg:gap-x-12">
+      {
+        pages.map((page) => (
+          <a
+            href={page.slug}
+            class="text-md leading-6 text-gray-100 hover:text-gray-900"
+          >
+            {page.title}
+          </a>
+        ))
+      }
+      <a
+        href="/events"
+        class="text-md leading-6 text-gray-100 hover:text-gray-900">Events</a
+      >
+      <a
+        href="/blog"
+        class="text-md leading-6 text-gray-100 hover:text-gray-900">Blog</a
+      >
+    </div>
+  </nav>
+  <!-- Mobile menu, show/hide based on menu open state. -->
+  <div class="hidden" role="dialog" aria-modal="true" id="mobile-menu">
+    <!-- Background backdrop, show/hide based on slide-over state. -->
+    <div class="fixed inset-0 z-10"></div>
+    <div
+      class="fixed inset-y-0 right-0 z-10 w-full overflow-y-auto bg-themeColor px-6 py-6 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10"
+    >
+      <div class="flex items-center justify-between">
+        <a href="/" class="-m-1.5 p-1.5 sm:invisible">
+          <span class="text-gray-100 text-2xl sm:text-3xl lg:text-5xl font-bold"
+            >Slow Dating Berlin</span
+          >
+          <Image
+            src={heartImage}
+            alt=""
+            width="45"
+            height="45"
+            class="w-auto h-8 inline align-bottom"
+            loading="eager"
+          />
+        </a>
+        <button
+          type="button"
+          class="-m-2.5 rounded-md p-2.5 text-gray-100"
+          id="close-button"
+        >
+          <span class="sr-only">Close menu</span>
+          <svg
+            class="h-6 w-6"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="1.5"
+            stroke="currentColor"
+            aria-hidden="true"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M6 18L18 6M6 6l12 12"></path>
+          </svg>
+        </button>
+      </div>
+      <div class="mt-6 flow-root">
+        <div class="-my-6 divide-y divide-gray-500/10">
+          <div class="space-y-2 py-6">
+            {
+              pages.map((page) => (
+                <a
+                  href={page.slug}
+                  class="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-100 hover:text-gray-900"
+                >
+                  {page.title}
+                </a>
+              ))
+            }
+            <a
+              href="/events"
+              class="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-100 hover:text-gray-900"
+              >Events</a
+            >
+            <a
+              href="/blog"
+              class="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-100 hover:text-gray-900"
+              >Blog</a
+            >
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<script>
+  const toggleButton = document.getElementById(
+    "menu-button",
+  ) as HTMLButtonElement;
+  const closeButton = document.getElementById(
+    "close-button",
+  ) as HTMLButtonElement;
+  const mobileMenu = document.getElementById("mobile-menu");
+
+  const toggleMenu = () => {
+    mobileMenu?.classList.toggle("hidden");
+  };
+
+  toggleButton!.addEventListener("click", toggleMenu);
+  closeButton!.addEventListener("click", toggleMenu);
+</script>
