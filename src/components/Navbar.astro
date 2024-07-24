@@ -55,7 +55,7 @@ const { pages } = Astro.props;
       {
         pages.map((page) => (
           <a
-            href={page.slug}
+            href=`/${page.slug}`
             class="text-md leading-6 text-gray-100 hover:text-gray-900"
           >
             {page.title}
@@ -120,7 +120,7 @@ const { pages } = Astro.props;
             {
               pages.map((page) => (
                 <a
-                  href={page.slug}
+                  href=`/${page.slug}`
                   class="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-100 hover:text-gray-900"
                 >
                   {page.title}
