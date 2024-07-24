@@ -26,10 +26,9 @@ const pageList = pages.data.pages.nodes;
 
 interface Props {
   title: string;
-  prose?: boolean;
 }
 
-const { title, prose = "true" } = Astro.props;
+const { title } = Astro.props;
 ---
 
 <!doctype html>

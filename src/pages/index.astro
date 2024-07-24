@@ -4,7 +4,6 @@ import ArticleCarousel from "../components/ArticleCarousel.astro";
 import EventCarousel from "../components/EventCarousel.astro";
 import type { CardProps } from "../components/Card.astro";
 import { postDateToDateString } from "../utils/postDateToDateString";
-import ContactForm from "../components/ContactForm.vue";
 
 interface ApiResponse {
   id: number;
@@ -110,7 +109,7 @@ const blogPosts = blogJson.data.posts.nodes;
 const blogCards = mapApiResponseToCardProps(blogPosts);
 ---
 
-<Layout title="Slow dating Berlin" prose={false}>
+<Layout title="Slow dating Berlin">
   {
     meetupCards.length > 0 && (
       <EventCarousel title="Events" cards={meetupCards} />
