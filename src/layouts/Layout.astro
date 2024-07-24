@@ -1,7 +1,5 @@
 ---
 import Navbar from "../components/Navbar.astro";
-import NewNav from "../components/NewNav.astro";
-import Banner from "../components/Banner.astro";
 import Footer from "../components/Footer.astro";
 import "../styles/tailwind.css";
 
@@ -46,7 +44,7 @@ const { title, prose = "true" } = Astro.props;
   </head>
   <body class="bg-themeColor font-poppins flex flex-col min-h-screen">
     <nav>
-      <NewNav pages={pageList} />
+      <Navbar pages={pageList} />
     </nav>
     <main class="container mx-auto mb-10">
       <slot />
