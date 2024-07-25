@@ -4,6 +4,7 @@ interface ApiResponse {
   id: number;
   slug: string;
   title: string;
+  excerpt: string;
   eventSettings?: {
     eventDate?: string;
   };
@@ -25,7 +26,7 @@ interface ApiResponse {
 export const mapMeetupsToCards = (apiResponse: ApiResponse[]): CardProps[] => {
   return apiResponse.map((response) => ({
     heading: response.title,
-    body: response.title,
+    excerpt: response.excerpt,
     href: `/events/${response.slug}`,
     date: response.eventSettings?.eventDate
       ? postDateToDateString(response.eventSettings!.eventDate)

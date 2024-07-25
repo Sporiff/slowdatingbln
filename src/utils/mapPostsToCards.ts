@@ -4,6 +4,7 @@ interface ApiResponse {
   id: number;
   slug: string;
   title: string;
+  excerpt: string;
   date: string;
   featuredImage: {
     node: {
@@ -23,7 +24,7 @@ interface ApiResponse {
 export const mapPostsToCards = (apiResponse: ApiResponse[]): CardProps[] => {
   return apiResponse.map((response) => ({
     heading: response.title,
-    body: response.title,
+    excerpt: response.excerpt,
     href: `/blog/${response.slug}`,
     date: response.date ? postDateToDateString(response.date) : "",
     imageSrc: response.featuredImage.node.mediaDetails.sizes[0].sourceUrl

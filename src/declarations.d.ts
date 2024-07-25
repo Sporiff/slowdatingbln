@@ -7,7 +7,7 @@ declare interface PageItem {
 declare interface CardProps {
   imageSrc: string;
   heading: string;
-  body: string;
+  excerpt: string;
   href: string;
   date: string;
   height: number;

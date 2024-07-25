@@ -16,6 +16,7 @@ const meetupData = await fetch(`${import.meta.env.PUBLIC_GRAPHQL_ENDPOINT}`, {
           id: databaseId
           slug
           title(format: RENDERED)
+          excerpt
           eventSettings {
             eventDate
           }
@@ -48,6 +49,7 @@ const blogData = await fetch(`${import.meta.env.PUBLIC_GRAPHQL_ENDPOINT}`, {
           id: databaseId
           slug
           title(format: RENDERED)
+          excerpt
           date
           featuredImage {
             node {
