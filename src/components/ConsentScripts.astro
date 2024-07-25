@@ -1,0 +1,69 @@
+<!-- Google tag (gtag.js) -->
+<script is:inline>
+  window.dataLayer = window.dataLayer || [];
+  function gtag() {
+    dataLayer.push(arguments);
+  }
+  // Set default consent state
+  gtag("consent", "default", {
+    ad_storage: "denied",
+    ad_user_data: "denied",
+    ad_personalization: "denied",
+    analytics_storage: "denied",
+  });
+</script>
+<script
+  is:inline
+  async
+  src="https://www.googletagmanager.com/gtag/js?id=G-HSQ1FTV7S7"></script>
+<script is:inline>
+  const cookieBanner = document.getElementById("cookie-banner");
+  const acceptButton = document.getElementById("accept-button");
+  const denyButton = document.getElementById("deny-button");
+  gtag("js", new Date());
+  gtag("config", "G-HSQ1FTV7S7");
+
+  window.getCookieConsent = function () {
+    try {
+      const consent = document.cookie.match(/cookie-consent=([^;]+)/)[1];
+      return consent;
+    } catch (error) {
+      return "unk";
+    }
+  };
+
+  const currentCookie = window.getCookieConsent();
+
+  if (currentCookie === "unk") {
+    console.log("Cookies not set");
+    cookieBanner.classList.toggle("hidden");
+  }
+
+  function grantAnalyticsConsent() {
+    console.log("Consent granted");
+    gtag("consent", "update", {
+      analytics_storage: "granted",
+    });
+    // accepted cookie lasts for a year
+    let d = new Date();
+    let oneYear = new Date(d.getFullYear() + 1, d.getMonth(), d.getDate());
+    document.cookie = "cookie-consent=granted; expires=" + oneYear + "; path=/";
+    cookieBanner.classList.toggle("hidden");
+  }
+
+  function denyAnalyticsConsent() {
+    console.log("Consent denied");
+    gtag("consent", "update", {
+      ad_storage: "denied",
+      ad_user_data: "denied",
+      ad_personalization: "denied",
+      analytics_storage: "denied",
+    });
+    // accepted cookie lasts for a year
+    document.cookie = "cookie-consent=denied; path=/";
+    cookieBanner.classList.toggle("hidden");
+  }
+
+  acceptButton.addEventListener("click", grantAnalyticsConsent);
+  denyButton.addEventListener("click", denyAnalyticsConsent);
+</script>
