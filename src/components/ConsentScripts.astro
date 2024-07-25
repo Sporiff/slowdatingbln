@@ -37,6 +37,11 @@
   if (currentCookie === "unk") {
     console.log("Cookies not set");
     cookieBanner.classList.toggle("hidden");
+  } else if (currentCookie === "granted") {
+    console.log("Consent already granted");
+    gtag("consent", "update", {
+      analytics_storage: "granted",
+    });
   }
 
   function grantAnalyticsConsent() {
