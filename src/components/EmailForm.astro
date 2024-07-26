@@ -39,24 +39,24 @@
     const notificationButton = document.getElementById("notification-button");
 
     if (result.status === "success") {
-      notificationIcon.innerHTML = `<svg class="h-6 w-6 text-green-400" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>`;
-      notificationMessage.textContent = "You're signed up!";
+      notificationIcon!.innerHTML = `<svg class="h-6 w-6 text-green-400" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>`;
+      notificationMessage!.textContent = "You're signed up!";
     } else {
-      notificationIcon.innerHTML = `<svg class="h-6 w-6 text-red-400" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>`;
-      notificationMessage.textContent = "Error: " + result.message;
+      notificationIcon!.innerHTML = `<svg class="h-6 w-6 text-red-400" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>`;
+      notificationMessage!.textContent = "Error: " + result.message;
     }
 
     function hideNotification() {
       const notification = document.getElementById("notification");
-      notification.classList.add("hidden");
+      notification!.classList.add("hidden");
     }
 
-    notification.classList.remove("hidden");
+    notification!.classList.remove("hidden");
 
     notificationButton!.addEventListener("click", hideNotification);
 
     setTimeout(() => {
-      notification.classList.add("hidden");
+      notification!.classList.add("hidden");
     }, 5000);
   });
 </script>
