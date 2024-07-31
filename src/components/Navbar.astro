@@ -1,7 +1,4 @@
 ---
-import { Image } from "astro:assets";
-import heartImage from "../images/heart.png";
-
 interface Props {
   pages: PageItem[];
 }
@@ -11,28 +8,20 @@ const { pages } = Astro.props;
 
 <header class="bg-themeColor">
   <nav
-    class="flex items-start lg:items-center lg:flex-col p-6 lg:px-8"
+    class="flex items-start flex-row lg:items-center lg:flex-col p-6 lg:px-8"
     aria-label="Global"
   >
     <div class="flex flex-1 justify-center mb-5 pl-6">
       <a href="/" class="-m-1.5 p-1.5">
-        <span class="text-gray-100 text-2xl sm:text-3xl lg:text-5xl font-bold"
+        <span class="text-gray-100 text-4xl sm:text-6xl font-bold"
           >Slow Dating Berlin</span
         >
-        <Image
-          src={heartImage}
-          alt=""
-          width="45"
-          height="45"
-          class="w-auto h-8 lg:h-10 inline align-bottom"
-          loading="eager"
-        />
       </a>
     </div>
-    <div class="flex lg:hidden justify-end pt-1">
+    <div class="flex lg:hidden justify-end pt-1 self-stretch">
       <button
         type="button"
-        class="-m-2.5 rounded-md p-2.5 text-gray-100"
+        class="-m-2.5 rounded-md sm:pt-7 p-2.5 text-gray-100 sm:inline-flex"
         id="menu-button"
       >
         <span class="sr-only">Open main menu</span>
@@ -81,17 +70,9 @@ const { pages } = Astro.props;
     >
       <div class="flex items-center justify-between">
         <a href="/" class="-m-1.5 p-1.5 sm:invisible">
-          <span class="text-gray-100 text-2xl sm:text-3xl lg:text-5xl font-bold"
+          <span class="text-gray-100 text-4xl xm:text-6xl font-bold"
             >Slow Dating Berlin</span
           >
-          <Image
-            src={heartImage}
-            alt=""
-            width="45"
-            height="45"
-            class="w-auto h-8 inline align-bottom"
-            loading="eager"
-          />
         </a>
         <button
           type="button"
