@@ -4,6 +4,10 @@ interface Props {
 }
 
 const { pages } = Astro.props;
+const slugOrder = ['newsletter', 'about', 'lonely-hearts-ads'];
+const orderedData = pages.sort((a: PageItem, b: PageItem) => {
+  return slugOrder.indexOf(a.slug) - slugOrder.indexOf(b.slug);
+});
 ---
 
 <header class="bg-themeColor">
@@ -41,20 +45,14 @@ const { pages } = Astro.props;
       </button>
     </div>
     <div class="hidden lg:flex lg:gap-x-12">
-      {
-        pages.map((page) => (
-          <a
-            href={"/" + page.slug}
-            class="text-md leading-6 text-gray-100 hover:text-gray-900"
-          >
-            {page.title}
-          </a>
-        ))
-      }
       <a
         href="/events"
         class="text-md leading-6 text-gray-100 hover:text-gray-900">Events</a
       >
+      {orderedData.map((page: PageItem) => (
+        <a href=`/${page.slug}`
+          class="text-md leading-6 text-gray-100 hover:text-gray-900">{page.title}</a>
+      ))}
       <a
         href="/blog"
         class="text-md leading-6 text-gray-100 hover:text-gray-900">Blog</a
@@ -98,8 +96,13 @@ const { pages } = Astro.props;
       <div class="mt-6 flow-root">
         <div class="-my-6 divide-y divide-gray-500/10">
           <div class="space-y-2 py-6">
+            <a
+              href="/events"
+              class="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-100 hover:text-gray-900"
+              >Events</a
+            >
             {
-              pages.map((page) => (
+              orderedData.map((page: PageItem) => (
                 <a
                   href={"/" + page.slug}
                   class="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-100 hover:text-gray-900"
@@ -108,11 +111,6 @@ const { pages } = Astro.props;
                 </a>
               ))
             }
-            <a
-              href="/events"
-              class="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-100 hover:text-gray-900"
-              >Events</a
-            >
             <a
               href="/blog"
               class="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-100 hover:text-gray-900"
