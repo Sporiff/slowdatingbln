@@ -1,38 +1,18 @@
 ---
 import Layout from "../../layouts/Layout.astro";
 import { Image } from "astro:assets";
-import { fetchPostData } from "../../utils/fetchData";
+import { blogPosts } from "../../utils/fetchData";
 
 const { slug } = Astro.params;
 
 export async function getStaticPaths() {
-  let data = await fetch(`${import.meta.env.PUBLIC_GRAPHQL_ENDPOINT}`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      query: `
-         {
-            posts(where: {categoryName: "blog"}) {
-               nodes {
-                  id: databaseId
-                  slug
-                  title(format: RENDERED)
-               }
-            }
-         }
-      `,
-    }),
-  });
-  let posts = await data.json();
-  let postList = posts.data.posts.nodes;
-
-  return postList.map((post: any) => ({
+  return blogPosts.map((post: PostItem) => ({
     params: { slug: post.slug },
     props: { post: post },
   }));
 }
 
-const postData = await fetchPostData(slug);
+const postData = blogPosts.find((post: any) => post.slug === slug);
 const { featuredImage } = postData;
 
 const imageWidth =
@@ -55,7 +35,7 @@ const imageHeight =
         featuredImage && (
           <div class={`max-w-[${imageWidth}px] mx-auto`}>
             <Image
-              alt={featuredImage.node.altText}
+              alt={featuredImage.node.altText ? featuredImage.node.altText : ""}
               src={featuredImage.node.sourceUrl}
               class="mx-auto"
               width={imageWidth}

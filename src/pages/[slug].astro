@@ -1,38 +1,18 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import { Image } from "astro:assets";
-import { fetchPageData } from "../utils/fetchData";
+import { pages } from "../utils/fetchData";
 
 const { slug } = Astro.params;
 
 export async function getStaticPaths() {
-  let data = await fetch(`${import.meta.env.PUBLIC_GRAPHQL_ENDPOINT}`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      query: `
-        {
-          pages {
-              nodes {
-                id: databaseId
-                slug
-                title(format:RENDERED)
-              }
-          }
-        }
-      `,
-    }),
-  });
-  let pages = await data.json();
-  let pageList = pages.data.pages.nodes;
-
-  return pageList.map((post: any) => ({
-    params: { slug: post.slug },
-    props: { post: post },
+  return pages.map((page: PageItem) => ({
+    params: { slug: page.slug },
+    props: { page: page },
   }));
 }
 
-const pageData = await fetchPageData(slug);
+const pageData = pages.find((page: any) => page.slug === slug);
 const { featuredImage } = pageData;
 const { width, height } = pageData;
 ---
