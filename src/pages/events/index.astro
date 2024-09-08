@@ -2,42 +2,7 @@
 import Layout from "../../layouts/Layout.astro";
 import PostCard from "../../components/PostCard.astro";
 import type { PostProps } from "../../components/PostCard.astro";
-
-let data = await fetch(`${import.meta.env.PUBLIC_GRAPHQL_ENDPOINT}`, {
-  method: "POST",
-  headers: { "Content-Type": "application/json" },
-  body: JSON.stringify({
-    query: `
-    {
-      posts(where: {categoryName: "meetups"}) {
-        nodes {
-          id: databaseId
-          slug
-          title(format: RENDERED)
-          excerpt(format: RENDERED)
-          eventSettings {
-            eventDate
-          }
-          featuredImage {
-            node {
-              mediaDetails {
-                sizes(include: MEDIUM) {
-                  height
-                  width
-                  sourceUrl
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-    `,
-  }),
-});
-
-const posts = await data.json();
-const postList = posts.data.posts.nodes;
+import { meetupPosts } from "../../utils/fetchData";
 ---
 
 <Layout title="Events">
@@ -47,15 +12,15 @@ const postList = posts.data.posts.nodes;
     <div class="mx-auto text-center">
       <h2 class="text-4xl font-bold tracking-tight text-gray-900">Events</h2>
       {
-        postList && postList.length > 0 && (
+        meetupPosts && meetupPosts.length > 0 && (
           <p class="mt-6 text-lg leading-8 text-gray-700">
             Check out our in-person events
           </p>
         )
       }
       {
-        !postList ||
-          (postList.length < 1 && (
+        !meetupPosts ||
+          (meetupPosts.length < 1 && (
             <p class="mt-6 text-lg leading-8 text-gray-700">
               Check out our in-person events.
             </p>
@@ -63,8 +28,8 @@ const postList = posts.data.posts.nodes;
       }
       <div class="mt-16 space-y-20 lg:mt-20 lg:space-y-20">
         {
-          postList &&
-            postList.map((post: PostProps) => <PostCard post={post} />)
+          meetupPosts &&
+            meetupPosts.map((post: PostProps) => <PostCard post={post} />)
         }
       </div>
     </div>

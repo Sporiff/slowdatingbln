@@ -1,42 +1,9 @@
 ---
 import Layout from "../../layouts/Layout.astro";
 import { Image } from "astro:assets";
+import { fetchPostData } from "../../utils/fetchData";
 
 const { slug } = Astro.params;
-
-let response = await fetch(`${import.meta.env.PUBLIC_GRAPHQL_ENDPOINT}`, {
-  method: "POST",
-  headers: { "Content-Type": "application/json" },
-  body: JSON.stringify({
-    query: `
-      {
-         post(id: "${slug}", idType: SLUG) {
-            author {
-               node {
-                  avatar {
-                     url
-                  }
-                  email
-                  name
-               }
-            }
-            content(format: RENDERED)
-            featuredImage {
-               node {
-                  altText
-                  sourceUrl
-                  mediaDetails {
-                    width
-                    height
-                  }
-               }
-            }
-            title(format: RENDERED)
-         }
-      }
-   `,
-  }),
-});
 
 export async function getStaticPaths() {
   let data = await fetch(`${import.meta.env.PUBLIC_GRAPHQL_ENDPOINT}`, {
@@ -65,8 +32,7 @@ export async function getStaticPaths() {
   }));
 }
 
-const post = await response.json();
-const postData = post.data.post;
+const postData = await fetchPostData(slug);
 const { featuredImage } = postData;
 
 const imageWidth =

@@ -1,33 +1,9 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import { Image } from "astro:assets";
+import { fetchPageData } from "../utils/fetchData";
 
 const { slug } = Astro.params;
-
-const response = await fetch(`${import.meta.env.PUBLIC_GRAPHQL_ENDPOINT}`, {
-  method: "POST",
-  headers: { "Content-Type": "application/json" },
-  body: JSON.stringify({
-    query: `
-      {
-        page(id: "/${slug}/", idType: URI) {
-          title
-          content(format: RENDERED)
-          featuredImage {
-            node {
-              sourceUrl
-              altText
-              mediaDetails {
-                width
-                height
-              }
-            }
-          }
-        }
-      }
-   `,
-  }),
-});
 
 export async function getStaticPaths() {
   let data = await fetch(`${import.meta.env.PUBLIC_GRAPHQL_ENDPOINT}`, {
@@ -56,18 +32,17 @@ export async function getStaticPaths() {
   }));
 }
 
-const json = await response.json();
-const { page } = json.data;
-const { featuredImage } = page;
-const { width, height } = page;
+const pageData = await fetchPageData(slug);
+const { featuredImage } = pageData;
+const { width, height } = pageData;
 ---
 
-<Layout title={page.title}>
+<Layout title={pageData.title}>
   <div class="w-full flex items-center justify-center">
     <section
       class="prose-h1:text-4xl prose-h2:text-3xl prose-h3:text-2xl p-10 prose lg:prose-xl prose-a:text-blue-700 bg-white bg-opacity-50 rounded-lg"
     >
-      <h1 class="text-center" set:html={page.title} />
+      <h1 class="text-center" set:html={pageData.title} />
       {
         featuredImage && (
           <Image
@@ -79,7 +54,7 @@ const { width, height } = page;
           />
         )
       }
-      <Fragment set:html={page.content} />
+      <Fragment set:html={pageData.content} />
     </section>
   </div>
 </Layout>
