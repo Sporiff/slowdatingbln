@@ -12,7 +12,7 @@ export async function getStaticPaths() {
   }));
 }
 
-const pageData = pages.find((page: any) => page.slug === slug);
+const pageData = pages.find((page: PageItem) => page.slug === slug);
 const { featuredImage } = pageData;
 const { width, height } = pageData;
 ---

@@ -12,7 +12,7 @@ export async function getStaticPaths() {
   }));
 }
 
-const postData = blogPosts.find((post: any) => post.slug === slug);
+const postData = blogPosts.find((post: PostItem) => post.slug === slug);
 const { featuredImage } = postData;
 
 const imageWidth =

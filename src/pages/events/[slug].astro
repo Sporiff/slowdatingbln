@@ -12,7 +12,7 @@ export async function getStaticPaths() {
   }));
 }
 
-const postData = meetupPosts.find((post: any) => post.slug === slug);
+const postData = meetupPosts.find((post: PostItem) => post.slug === slug);
 const { featuredImage } = postData;
 
 const imageWidth =
