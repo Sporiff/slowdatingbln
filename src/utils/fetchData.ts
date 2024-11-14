@@ -1,5 +1,4 @@
-import { mapMeetupsToCards } from "./mapMeetupsToCards";
-import { mapPostsToCards } from "./mapPostsToCards";
+import { mapMeetupsToCards, mapPostsToCards } from "./mapCards.ts";
 
 const batchedData = await fetch(`${import.meta.env.PUBLIC_GRAPHQL_ENDPOINT}`, {
   method: "POST",
@@ -112,3 +111,5 @@ export const meetupCards = mapMeetupsToCards(meetupPosts);
 export const blogPosts = data.blogPosts.nodes;
 export const blogCards = mapPostsToCards(blogPosts);
 export const pages = data.pages.nodes;
+
+console.log(meetupPosts[0]);

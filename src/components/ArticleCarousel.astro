@@ -9,36 +9,84 @@ interface CarouselProps {
 const { title, cards } = Astro.props as CarouselProps;
 ---
 
-<div class="relative overflow-hidden my-4 w-10/12 mx-auto">
-  <h2 class="my-2 text-white font-bold text-3xl">{title}</h2>
-  <div
-    id="article-carousel"
-    class="flex transition-transform duration-500 ease-in-out gap-x-4"
-    data-cards={cards.length}
-  >
+<div class="carousel-container">
+  <h2 class="carousel-title">{title}</h2>
+  <div id="article-carousel" class="carousel-track" data-cards={cards.length}>
     {
       cards.map((card) => (
-        <div class="xs:min-w-full sm:min-w-1/3 lg:min-w-auto flex-shrink-0">
+        <div class="carousel-card">
           <Card {...card} />
         </div>
       ))
     }
   </div>
   <>
-    <button
-      id="article-prevBtn"
-      class="absolute left-0 top-1/2 transform -translate-y-1/2 bg-white p-2 shadow-lg"
-    >
+    <button id="article-prevBtn" class="carousel-button carousel-prevBtn">
       Prev
     </button>
-    <button
-      id="article-nextBtn"
-      class="absolute right-0 top-1/2 transform -translate-y-1/2 bg-white p-2 shadow-lg"
-    >
+    <button id="article-nextBtn" class="carousel-button carousel-nextBtn">
       Next
     </button>
   </>
 </div>
+
+<style>
+  .carousel-container {
+    position: relative;
+    overflow: hidden;
+    margin: 1rem auto;
+    width: 83.3333%;
+  }
+
+  .carousel-title {
+    margin: 0.5rem 0;
+    color: white;
+    font-weight: bold;
+    font-size: 1.875rem;
+  }
+
+  .carousel-track {
+    display: flex;
+    transition: transform 0.5s ease-in-out;
+    gap: 1rem;
+  }
+
+  .carousel-card {
+    flex-shrink: 0;
+    min-width: 100%;
+  }
+
+  @media (min-width: 640px) {
+    .carousel-card {
+      min-width: 33.3333%;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .carousel-card {
+      min-width: auto;
+    }
+  }
+
+  .carousel-button {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: white;
+    padding: 0.5rem;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    border: none;
+    cursor: pointer;
+  }
+
+  .carousel-prevBtn {
+    left: 0;
+  }
+
+  .carousel-nextBtn {
+    right: 0;
+  }
+</style>
 
 <script>
   const updateCarousel = () => {

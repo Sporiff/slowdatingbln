@@ -18,7 +18,7 @@ const { width, height } = pageData;
 ---
 
 <Layout title={pageData.title}>
-  <div class="w-full flex items-center justify-center">
+  <div class="main-container">
     <section
       class="prose-h1:text-4xl prose-h2:text-3xl prose-h3:text-2xl p-10 prose lg:prose-xl prose-a:text-blue-700 bg-white bg-opacity-50 rounded-lg"
     >
@@ -38,3 +38,34 @@ const { width, height } = pageData;
     </section>
   </div>
 </Layout>
+
+<style>
+  .main-container {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .content-container {
+    background-color: white;
+    --tw-bg-opacity: 0.5;
+    border-radius: 0.5rem;
+    @apply prose-h1:text-4xl prose-h2:text-3xl prose-h3:text-2xl p-10 prose lg:prose-xl prose-a:text-blue-700 bg-white bg-opacity-50 rounded-lg;
+  }
+
+  .content-container h1 {
+    font-size: 2.25rem;
+    line-height: 2.5rem;
+  }
+
+  .content-container h2 {
+    font-size: 1.875rem;
+    line-height: 2.25rem;
+  }
+
+  .content-container h3 {
+    font-size: 1.5rem;
+    line-height: 2rem;
+  }
+</style>

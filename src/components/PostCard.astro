@@ -1,32 +1,8 @@
 ---
-import { postDateToDateString } from "../utils/postDateToDateString";
-
-export interface PostProps {
-  id: string;
-  slug: string;
-  title: string;
-  date?: string;
-  excerpt: string;
-  eventSettings?: {
-    eventDate?: string;
-  };
-  featuredImage: {
-    node: {
-      mediaDetails: {
-        sizes: [
-          {
-            height: number;
-            width: number;
-            sourceUrl: string;
-          },
-        ];
-      };
-    };
-  };
-}
+import { postDateToDateString } from "../utils/mapCards.ts";
 
 interface Props {
-  post: PostProps;
+  post: MeetupResponse | PostResponse;
 }
 
 const { post } = Astro.props;
@@ -50,7 +26,7 @@ const { post } = Astro.props;
   </div>
   <div>
     {
-      post.eventSettings?.eventDate && (
+      "eventSettings" in post && post.eventSettings?.eventDate && (
         <div class="flex items-center gap-x-4 text-xs">
           <time
             datetime={postDateToDateString(post.eventSettings.eventDate)}
@@ -62,7 +38,7 @@ const { post } = Astro.props;
       )
     }
     {
-      post.date && (
+      "date" in post && post.date && (
         <div class="flex items-center gap-x-4 text-xs">
           <time
             datetime={postDateToDateString(post.date)}
@@ -78,7 +54,7 @@ const { post } = Astro.props;
         class="mt-3 text-lg font-semibold leading-6 text-gray-900 group-hover:text-gray-600"
       >
         {
-          post.eventSettings?.eventDate && (
+          "eventSettings" in post && post.eventSettings?.eventDate && (
             <a href={"/events/" + post.slug}>
               <span class="absolute inset-0" />
               {post.title}
@@ -86,7 +62,7 @@ const { post } = Astro.props;
           )
         }
         {
-          post.date && (
+          "date" in post && post.date && (
             <a href={"/blog/" + post.slug}>
               <span class="absolute inset-0" />
               {post.title}
