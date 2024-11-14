@@ -111,5 +111,3 @@ export const meetupCards = mapMeetupsToCards(meetupPosts);
 export const blogPosts = data.blogPosts.nodes;
 export const blogCards = mapPostsToCards(blogPosts);
 export const pages = data.pages.nodes;
-
-console.log(meetupPosts[0]);

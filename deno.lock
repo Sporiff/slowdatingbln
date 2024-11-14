@@ -3085,7 +3085,6 @@
       "npm:@tailwindcss/forms@~0.5.9",
       "npm:@tailwindcss/typography@~0.5.15",
       "npm:astro@^4.16.12",
-      "npm:sharp@~0.33.5",
       "npm:tailwindcss@^3.4.14",
       "npm:typescript@^5.6.3"
     ]

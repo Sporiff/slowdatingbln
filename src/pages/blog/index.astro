@@ -2,7 +2,6 @@
 import Layout from "../../layouts/Layout.astro";
 import PostCard from "../../components/PostCard.astro";
 import { blogPosts } from "../../utils/fetchData";
-import type { PostProps } from "../../components/PostCard.astro";
 ---
 
 <Layout title="News & Community">
@@ -29,7 +28,9 @@ import type { PostProps } from "../../components/PostCard.astro";
       <div class="mt-16 space-y-20 lg:mt-20 lg:space-y-20">
         {
           blogPosts &&
-            blogPosts.map((post: PostProps) => <PostCard post={post} />)
+            blogPosts.map((post: MeetupResponse | PostResponse) => (
+              <PostCard post={post} />
+            ))
         }
       </div>
     </div>
