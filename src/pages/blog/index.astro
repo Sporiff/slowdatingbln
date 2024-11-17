@@ -26,7 +26,12 @@ import { postCards } from "../../utils/fetchData";
           ))
       }
       <div class="mt-16 space-y-20 lg:mt-20 lg:space-y-20">
-        {postCards && postCards.map((card) => <PostCard {...card} />)}
+        {
+          postCards &&
+            postCards.map((card, index) => (
+              <PostCard lazy={index < 2 ? false : true} {...card} />
+            ))
+        }
       </div>
     </div>
   </div>

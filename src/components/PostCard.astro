@@ -2,6 +2,7 @@
 import { Image } from "astro:assets";
 
 const {
+  lazy,
   imageSrc,
   href,
   heading,
@@ -9,7 +10,7 @@ const {
   date,
   width = 300,
   height = 300,
-} = Astro.props as CardProps;
+} = Astro.props as CardOptions;
 ---
 
 <article class="relative isolate flex flex-col gap-8 lg:flex-row text-left">
@@ -21,7 +22,7 @@ const {
       alt=""
       width={width}
       height={height}
-      loading="lazy"
+      loading={lazy ? "lazy" : "eager"}
       class="absolute inset-0 h-full w-full max-w-[300px] max-h-[300px] mx-auto rounded-2xl bg-gray-50 object-cover"
     />
     <div

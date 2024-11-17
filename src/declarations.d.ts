@@ -34,6 +34,10 @@ declare type CardProps = {
    width: number;
 };
 
+interface CardOptions extends CardProps {
+   lazy: boolean;
+}
+
 interface ApiResponseBase {
    id: number;
    slug: string;
