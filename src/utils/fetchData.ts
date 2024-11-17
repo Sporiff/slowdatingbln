@@ -1,11 +1,12 @@
-import { mapMeetupsToCards } from "./mapMeetupsToCards";
-import { mapPostsToCards } from "./mapPostsToCards";
+import { DateFormatter } from "./DateFormatter.ts";
+import { CardMapper } from "./CardMapper.ts";
+import { GRAPHQL_ENDPOINT } from "astro:env/client";
 
-const batchedData = await fetch(`${import.meta.env.PUBLIC_GRAPHQL_ENDPOINT}`, {
-  method: "POST",
-  headers: { "Content-Type": "application/json" },
-  body: JSON.stringify({
-    query: `
+const batchedData = await fetch(`${GRAPHQL_ENDPOINT}`, {
+   method: "POST",
+   headers: { "Content-Type": "application/json" },
+   body: JSON.stringify({
+      query: `
       query BatchedQueries($meetupName: String!, $blogName: String!) {
         meetupPosts: posts(where: {categoryName: $meetupName}) {
           nodes {
@@ -97,18 +98,21 @@ const batchedData = await fetch(`${import.meta.env.PUBLIC_GRAPHQL_ENDPOINT}`, {
         }
       }
     `,
-    variables: {
-      blogName: "blog",
-      meetupName: "meetups",
-    },
-  }),
+      variables: {
+         blogName: "blog",
+         meetupName: "meetups",
+      },
+   }),
 });
 
 const { data } = await batchedData.json();
+const meetupCardMapper = new CardMapper("/events", DateFormatter.extractDate);
+const postCardMapper = new CardMapper("/blog", DateFormatter.extractDate);
 
-export const meetupPosts = data.meetupPosts.nodes;
-export const meetupCards = mapMeetupsToCards(meetupPosts);
+export const meetupPosts: MeetupResponse[] = data.meetupPosts.nodes;
+export const meetupCards = meetupCardMapper.mapResponseToCards(meetupPosts);
 
-export const blogPosts = data.blogPosts.nodes;
-export const blogCards = mapPostsToCards(blogPosts);
+export const blogPosts: PostResponse[] = data.blogPosts.nodes;
+export const postCards = postCardMapper.mapResponseToCards(blogPosts);
+
 export const pages = data.pages.nodes;

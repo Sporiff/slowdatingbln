@@ -1,9 +1,10 @@
-<!-- Google tag (gtag.js) -->
 <script is:inline>
+  // Initialize dataLayer if not already present
   window.dataLayer = window.dataLayer || [];
   function gtag() {
     dataLayer.push(arguments);
   }
+
   // Set default consent state
   gtag("consent", "default", {
     ad_storage: "denied",
@@ -11,64 +12,72 @@
     ad_personalization: "denied",
     analytics_storage: "denied",
   });
-</script>
-<script
-  is:inline
-  async
-  src="https://www.googletagmanager.com/gtag/js?id=G-HSQ1FTV7S7"></script>
-<script is:inline>
-  const cookieBanner = document.getElementById("cookie-banner");
-  const acceptButton = document.getElementById("accept-button");
-  const denyButton = document.getElementById("deny-button");
-  gtag("js", new Date());
-  gtag("config", "G-HSQ1FTV7S7");
 
-  window.getCookieConsent = function () {
-    try {
-      const consent = document.cookie.match(/cookie-consent=([^;]+)/)[1];
-      return consent;
-    } catch (error) {
-      return "unk";
+  // Function to get cookie value by name
+  function getCookie(name) {
+    const match = document.cookie.match(
+      new RegExp("(^| )" + name + "=([^;]+)")
+    );
+    return match ? match[2] : null;
+  }
+
+  // Function to set a cookie with options
+  function setCookie(name, value, days) {
+    const expires = days
+      ? "; expires=" + new Date(Date.now() + days * 86400000).toUTCString()
+      : "";
+    document.cookie = `${name}=${value}; path=/;${expires}`;
+  }
+
+  // Set up event listeners for consent actions
+  function setupConsentControls() {
+    const cookieBanner = document.getElementById("cookie-banner");
+    const acceptButton = document.getElementById("accept-button");
+    const denyButton = document.getElementById("deny-button");
+
+    const currentConsent = getCookie("cookie-consent");
+
+    if (!currentConsent) {
+      // Show banner if consent is not set
+      cookieBanner.classList.remove("hidden");
+    } else if (currentConsent === "granted") {
+      // Apply granted consent
+      gtag("consent", "update", { analytics_storage: "granted" });
     }
-  };
 
-  const currentCookie = window.getCookieConsent();
+    acceptButton.addEventListener("click", () => {
+      updateConsent("granted");
+      cookieBanner.classList.add("hidden");
+    });
 
-  if (currentCookie === "unk") {
-    console.log("Cookies not set");
-    cookieBanner.classList.toggle("hidden");
-  } else if (currentCookie === "granted") {
-    console.log("Consent already granted");
-    gtag("consent", "update", {
-      analytics_storage: "granted",
+    denyButton.addEventListener("click", () => {
+      updateConsent("denied");
+      cookieBanner.classList.add("hidden");
     });
   }
 
-  function grantAnalyticsConsent() {
-    console.log("Consent granted");
-    gtag("consent", "update", {
-      analytics_storage: "granted",
-    });
-    // accepted cookie lasts for a year
-    let d = new Date();
-    let oneYear = new Date(d.getFullYear() + 1, d.getMonth(), d.getDate());
-    document.cookie = "cookie-consent=granted; expires=" + oneYear + "; path=/";
-    cookieBanner.classList.toggle("hidden");
+  // Update Google Analytics consent preferences
+  function updateConsent(consent) {
+    if (consent === "granted") {
+      gtag("consent", "update", { analytics_storage: "granted" });
+      setCookie("cookie-consent", "granted", 365);
+      console.log("Consent granted");
+    } else {
+      gtag("consent", "update", {
+        ad_storage: "denied",
+        ad_user_data: "denied",
+        ad_personalization: "denied",
+        analytics_storage: "denied",
+      });
+      setCookie("cookie-consent", "denied", 365);
+      console.log("Consent denied");
+    }
   }
 
-  function denyAnalyticsConsent() {
-    console.log("Consent denied");
-    gtag("consent", "update", {
-      ad_storage: "denied",
-      ad_user_data: "denied",
-      ad_personalization: "denied",
-      analytics_storage: "denied",
-    });
-    // accepted cookie lasts for a year
-    document.cookie = "cookie-consent=denied; path=/";
-    cookieBanner.classList.toggle("hidden");
-  }
-
-  acceptButton.addEventListener("click", grantAnalyticsConsent);
-  denyButton.addEventListener("click", denyAnalyticsConsent);
+  // Initialize the script
+  document.addEventListener("DOMContentLoaded", () => {
+    gtag("js", new Date());
+    gtag("config", "G-HSQ1FTV7S7");
+    setupConsentControls();
+  });
 </script>

@@ -6,21 +6,21 @@ import { blogPosts } from "../../utils/fetchData";
 const { slug } = Astro.params;
 
 export async function getStaticPaths() {
-  return blogPosts.map((post: PostItem) => ({
+  return blogPosts.map((post: PostResponse) => ({
     params: { slug: post.slug },
     props: { post: post },
   }));
 }
 
-const postData = blogPosts.find((post: PostItem) => post.slug === slug);
+const postData = blogPosts.find((post: PostResponse) => post.slug === slug)!;
 const { featuredImage } = postData;
 
 const imageWidth =
-  featuredImage.node.mediaDetails.width < 300
+  featuredImage.node.mediaDetails.width! < 300
     ? featuredImage.node.mediaDetails.width
     : 300;
 const imageHeight =
-  featuredImage.node.mediaDetails.height < 300
+  featuredImage.node.mediaDetails.height! < 300
     ? featuredImage.node.mediaDetails.height
     : 300;
 ---
@@ -36,10 +36,10 @@ const imageHeight =
           <div class={`max-w-[${imageWidth}px] mx-auto`}>
             <Image
               alt={featuredImage.node.altText ? featuredImage.node.altText : ""}
-              src={featuredImage.node.sourceUrl}
+              src={featuredImage.node.sourceUrl!}
               class="mx-auto"
-              width={imageWidth}
-              height={imageHeight}
+              width={imageWidth!}
+              height={imageHeight!}
             />
           </div>
         )

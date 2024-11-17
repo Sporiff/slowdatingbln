@@ -1,46 +1,27 @@
 ---
-import { postDateToDateString } from "../utils/postDateToDateString";
+import { Image } from "astro:assets";
 
-export interface PostProps {
-  id: string;
-  slug: string;
-  title: string;
-  date?: string;
-  excerpt: string;
-  eventSettings?: {
-    eventDate?: string;
-  };
-  featuredImage: {
-    node: {
-      mediaDetails: {
-        sizes: [
-          {
-            height: number;
-            width: number;
-            sourceUrl: string;
-          },
-        ];
-      };
-    };
-  };
-}
-
-interface Props {
-  post: PostProps;
-}
-
-const { post } = Astro.props;
+const {
+  imageSrc,
+  href,
+  heading,
+  excerpt,
+  date,
+  width = 300,
+  height = 300,
+} = Astro.props as CardProps;
 ---
 
 <article class="relative isolate flex flex-col gap-8 lg:flex-row text-left">
   <div
     class="relative aspect-[16/9] sm:aspect-[2/1] lg:aspect-square lg:w-64 lg:shrink-0"
   >
-    <img
-      src={post.featuredImage.node.mediaDetails.sizes[0].sourceUrl}
+    <Image
+      src={imageSrc}
       alt=""
-      width={post.featuredImage.node.mediaDetails.sizes[0].width}
-      height={post.featuredImage.node.mediaDetails.sizes[0].height}
+      width={width}
+      height={height}
+      loading="lazy"
       class="absolute inset-0 h-full w-full max-w-[300px] max-h-[300px] mx-auto rounded-2xl bg-gray-50 object-cover"
     />
     <div
@@ -49,52 +30,21 @@ const { post } = Astro.props;
     </div>
   </div>
   <div>
-    {
-      post.eventSettings?.eventDate && (
-        <div class="flex items-center gap-x-4 text-xs">
-          <time
-            datetime={postDateToDateString(post.eventSettings.eventDate)}
-            class="text-gray-500 text-center sm:text-left"
-          >
-            {postDateToDateString(post.eventSettings.eventDate)}
-          </time>
-        </div>
-      )
-    }
-    {
-      post.date && (
-        <div class="flex items-center gap-x-4 text-xs">
-          <time
-            datetime={postDateToDateString(post.date)}
-            class="text-gray-500 text-center sm:text-left"
-          >
-            {postDateToDateString(post.date)}
-          </time>
-        </div>
-      )
-    }
+    <div class="flex items-center gap-x-4 text-xs">
+      <time datetime={date} class="text-gray-500 text-center sm:text-left">
+        {date}
+      </time>
+    </div>
     <div class="group relative max-w-xl">
       <h3
         class="mt-3 text-lg font-semibold leading-6 text-gray-900 group-hover:text-gray-600"
       >
-        {
-          post.eventSettings?.eventDate && (
-            <a href={"/events/" + post.slug}>
-              <span class="absolute inset-0" />
-              {post.title}
-            </a>
-          )
-        }
-        {
-          post.date && (
-            <a href={"/blog/" + post.slug}>
-              <span class="absolute inset-0" />
-              {post.title}
-            </a>
-          )
-        }
+        <a href={href}>
+          <span class="absolute inset-0"></span>
+          {heading}
+        </a>
       </h3>
-      <p class="mt-5 text-sm leading-6 text-gray-600" set:html={post.excerpt} />
+      <p class="mt-5 text-sm leading-6 text-gray-600" set:html={excerpt} />
     </div>
   </div>
 </article>

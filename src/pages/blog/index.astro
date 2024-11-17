@@ -1,8 +1,7 @@
 ---
 import Layout from "../../layouts/Layout.astro";
 import PostCard from "../../components/PostCard.astro";
-import { blogPosts } from "../../utils/fetchData";
-import type { PostProps } from "../../components/PostCard.astro";
+import { postCards } from "../../utils/fetchData";
 ---
 
 <Layout title="News & Community">
@@ -14,23 +13,20 @@ import type { PostProps } from "../../components/PostCard.astro";
         News & Community
       </h2>
       {
-        blogPosts && blogPosts.length > 0 && (
+        postCards && postCards.length > 0 && (
           <p class="mt-6 text-lg leading-8 text-gray-700">
             Catch up on what's been happening
           </p>
         )
       }
       {
-        !blogPosts ||
-          (blogPosts.length < 1 && (
+        !postCards ||
+          (postCards.length < 1 && (
             <p class="mt-6 text-lg leading-8 text-gray-700">No posts yet</p>
           ))
       }
       <div class="mt-16 space-y-20 lg:mt-20 lg:space-y-20">
-        {
-          blogPosts &&
-            blogPosts.map((post: PostProps) => <PostCard post={post} />)
-        }
+        {postCards && postCards.map((card) => <PostCard {...card} />)}
       </div>
     </div>
   </div>

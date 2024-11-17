@@ -1,0 +1,48 @@
+---
+import logo from "../images/logo.png";
+import favicon from "../images/favicon.png";
+import Icons from "../components/Icons.astro";
+
+interface Props {
+  title: string;
+}
+
+const { title } = Astro.props;
+---
+
+<head>
+  <meta charset="UTF-8" />
+  <!-- CSS -->
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500&display=swap"
+    rel="stylesheet"
+  />
+
+  <!-- Primary Meta Tags -->
+  <title>Slow Dating Berlin</title>
+  <meta name="title" content="Slow Dating Berlin" />
+  <meta name="description" content="Meet cool new people IRL." />
+
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://slowdatingbln.com" />
+  <meta property="og:title" content="Slow Dating Berlin" />
+  <meta property="og:description" content="Meet cool new people IRL." />
+  <meta property="og:image" content={logo.src} />
+
+  <!-- Twitter -->
+  <meta property="twitter:card" content="summary_large_image" />
+  <meta property="twitter:url" content="https://slowdatingbln.com" />
+  <meta property="twitter:title" content="Slow Dating Berlin" />
+  <meta property="twitter:description" content="Meet cool new people IRL." />
+  <meta property="twitter:image" content={logo.src} />
+  <meta name="viewport" content="width=device-width" />
+  <link rel="icon" type="image/svg+xml" href={favicon.src} />
+  <meta name="generator" content={Astro.generator} />
+
+  <Icons />
+  <title>{title}</title>
+</head>
