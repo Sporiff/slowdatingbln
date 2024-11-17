@@ -1,0 +1,57 @@
+---
+import Card from "./Card.astro";
+
+interface CarouselProps {
+  title: string;
+  cards: CardProps[];
+  id: string;
+}
+
+const { title, cards, id } = Astro.props as CarouselProps;
+---
+
+<div
+  class="carousel container relative overflow-hidden my-4 w-10/12 mx-auto"
+  data-carousel-id={id}
+>
+  <h2 class="my-2 text-white font-bold text-3xl">{title}</h2>
+  <div
+    id={`${id}-track`}
+    class="flex transition-transform duration-500 ease-in-out gap-x-4"
+    data-cards={cards.length}
+  >
+    {
+      cards.map((card) => (
+        <div class="xs:min-w-full sm:min-w-1/3 lg:min-w-auto flex-shrink-0">
+          <Card {...card} />
+        </div>
+      ))
+    }
+  </div>
+  <button
+    id={`${id}-prevBtn`}
+    class="absolute left-0 top-1/2 transform -translate-y-1/2 bg-white p-2 shadow-lg"
+  >
+    Prev
+  </button>
+  <button
+    id={`${id}-nextBtn`}
+    class="absolute right-0 top-1/2 transform -translate-y-1/2 bg-white p-2 shadow-lg"
+  >
+    Next
+  </button>
+</div>
+
+<script>
+  import { CarouselController } from "./utils/CarouselController";
+  const carousels = Array.from(
+    document.querySelectorAll(".carousel.container")
+  );
+
+  document.addEventListener("DOMContentLoaded", () => {
+    for (const carousel of carousels) {
+      let carouselEl = carousel as HTMLElement;
+      new CarouselController(carouselEl.dataset.carouselId!);
+    }
+  });
+</script>

@@ -1,7 +1,7 @@
 ---
 import Layout from "../../layouts/Layout.astro";
 import PostCard from "../../components/PostCard.astro";
-import { meetupPosts } from "../../utils/fetchData";
+import { meetupCards } from "../../utils/fetchData";
 ---
 
 <Layout title="Events">
@@ -11,27 +11,22 @@ import { meetupPosts } from "../../utils/fetchData";
     <div class="mx-auto text-center">
       <h2 class="text-4xl font-bold tracking-tight text-gray-900">Events</h2>
       {
-        meetupPosts && meetupPosts.length > 0 && (
+        meetupCards && meetupCards.length > 0 && (
           <p class="mt-6 text-lg leading-8 text-gray-700">
             Check out our in-person events
           </p>
         )
       }
       {
-        !meetupPosts ||
-          (meetupPosts.length < 1 && (
+        !meetupCards ||
+          (meetupCards.length < 1 && (
             <p class="mt-6 text-lg leading-8 text-gray-700">
               Check out our in-person events.
             </p>
           ))
       }
       <div class="mt-16 space-y-20 lg:mt-20 lg:space-y-20">
-        {
-          meetupPosts &&
-            meetupPosts.map((post: MeetupResponse | PostResponse) => (
-              <PostCard post={post} />
-            ))
-        }
+        {meetupCards && meetupCards.map((card) => <PostCard {...card} />)}
       </div>
     </div>
   </div>

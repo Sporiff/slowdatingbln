@@ -6,23 +6,33 @@ import { meetupPosts } from "../../utils/fetchData";
 const { slug } = Astro.params;
 
 export async function getStaticPaths() {
-  return meetupPosts.map((post: PostItem) => ({
+  return meetupPosts.map((post: MeetupResponse) => ({
     params: { slug: post.slug },
     props: { post: post },
   }));
 }
 
-const postData = meetupPosts.find((post: PostItem) => post.slug === slug);
+const postData = meetupPosts.find(
+  (post: MeetupResponse) => post.slug === slug
+)!;
 const { featuredImage } = postData;
 
-const imageWidth =
-  featuredImage.node.mediaDetails.width < 300
-    ? featuredImage.node.mediaDetails.width
-    : 300;
-const imageHeight =
-  featuredImage.node.mediaDetails.height < 300
-    ? featuredImage.node.mediaDetails.height
-    : 300;
+let imageWidth = 300;
+let imageHeight = 300;
+
+if (featuredImage && featuredImage.node.mediaDetails.width) {
+  imageWidth =
+    featuredImage.node.mediaDetails.width < 300
+      ? featuredImage.node.mediaDetails.width
+      : imageWidth;
+}
+
+if (featuredImage && featuredImage.node.mediaDetails.height) {
+  imageHeight =
+    featuredImage.node.mediaDetails.height < 300
+      ? featuredImage.node.mediaDetails.height
+      : imageHeight;
+}
 ---
 
 <Layout title={postData.title}>
@@ -30,13 +40,13 @@ const imageHeight =
     <article
       class="prose-h1:text-4xl prose-h2:text-3xl prose-h3:text-2xl p-10 prose lg:prose-xl prose-a:text-blue-700 bg-white rounded-lg"
     >
-      <h1 class="text-center" set:html={postData.title} />
+      <h1 class="text-center" set:html={postData!.title} />
       {
         featuredImage && (
           <div class={`max-w-[${imageWidth}px] mx-auto`}>
             <Image
               alt={featuredImage.node.altText ? featuredImage.node.altText : ""}
-              src={featuredImage.node.sourceUrl}
+              src={featuredImage.node.sourceUrl!}
               class="mx-auto"
               width={imageWidth}
               height={imageHeight}

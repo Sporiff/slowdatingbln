@@ -7,12 +7,12 @@ export default {
       },
       extend: {
          backgroundColor: {
-            themeColor: "#9392c7",
+            themeColor: "#00735c",
          },
          textColor: {
             accent: "#F4C699",
          },
       },
    },
-   plugins: [require("@tailwindcss/typography"), require("@tailwindcss/forms")],
+   plugins: [require("@tailwindcss/typography")],
 };

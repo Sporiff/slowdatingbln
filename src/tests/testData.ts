@@ -1,14 +1,10 @@
-// @deno-types="../declarations.d.ts"
-
-import { assertEquals } from "jsr:@std/assert";
-import { mapMeetupsToCards, mapPostsToCards } from "./mapCards.ts";
-
-const dummyMeetup: MeetupResponse = {
+export const dummyMeetup: MeetupResponse = {
    id: 1,
    slug: "test-meetup",
    title: "Test meetup",
    excerpt: "<p>A test meetup</p>\n",
    eventSettings: { eventDate: "2024-12-05T19:30:00+00:00" },
+   content: "Some content",
    author: {
       node: {
          avatar: {
@@ -37,7 +33,7 @@ const dummyMeetup: MeetupResponse = {
    },
 };
 
-const expectedMeetup: CardProps = {
+export const expectedMeetup: CardProps = {
    heading: "Test meetup",
    excerpt: "<p>A test meetup</p>\n",
    href: "/events/test-meetup",
@@ -47,12 +43,13 @@ const expectedMeetup: CardProps = {
    width: 300,
 };
 
-const dummyPost: PostResponse = {
+export const dummyPost: PostResponse = {
    id: 2,
    slug: "test-blog-post",
    title: "Test blog post",
    excerpt: "<p>A test blog post</p>\n",
    date: "2024-12-05T19:30:00+00:00",
+   content: "Some content",
    author: {
       node: {
          avatar: {
@@ -81,7 +78,7 @@ const dummyPost: PostResponse = {
    },
 };
 
-const expectedBlogPost: CardProps = {
+export const expectedPost: CardProps = {
    heading: "Test blog post",
    excerpt: "<p>A test blog post</p>\n",
    href: "/blog/test-blog-post",
@@ -91,10 +88,5 @@ const expectedBlogPost: CardProps = {
    width: 300,
 };
 
-Deno.test("test meetup card mapping", () => {
-   assertEquals(mapMeetupsToCards([dummyMeetup]), [expectedMeetup]);
-});
-
-Deno.test("test post card mapping", () => {
-   assertEquals(mapPostsToCards([dummyPost]), [expectedBlogPost]);
-});
+export const dummyDate = "2024-12-05T19:30:00+00:00";
+export const expectedDate = "Thu, 5 December 2024";

@@ -1,7 +1,7 @@
 type MediaDetails = {
   width: number;
   height: number;
-  sizes?: {
+  sizes: {
     height: number;
     width: number;
     sourceUrl: string;
@@ -12,15 +12,7 @@ type FeaturedImage = {
   node: {
     sourceUrl: string;
     altText: string;
-    mediaDetails: {
-      width: number;
-      height: number;
-      sizes?: {
-        height: number;
-        width: number;
-        sourceUrl: string;
-      }[];
-    };
+    mediaDetails: MediaDetails;
   };
 };
 
@@ -28,31 +20,6 @@ declare type PageItem = {
   id: number;
   slug: string;
   title: string;
-  content: string;
-  featuredImage: {
-    node: {
-      sourceUrl: string;
-      altText: string;
-      mediaDetails: MediaDetails;
-    };
-  };
-};
-
-declare type PostItem = {
-  id: number;
-  slug: string;
-  title: string;
-  excerpt: string;
-  date?: string;
-  author: {
-    node: {
-      avatar: {
-        url: string;
-      };
-      email: string;
-      name: string;
-    };
-  };
   content: string;
   featuredImage: FeaturedImage;
 };
@@ -72,6 +39,7 @@ interface ApiResponseBase {
   slug: string;
   title: string;
   excerpt: string;
+  content: string;
   author?: {
     node: {
       avatar: {
@@ -85,17 +53,7 @@ interface ApiResponseBase {
     node: {
       altText?: string;
       sourceUrl?: string;
-      mediaDetails: {
-        width?: number;
-        height?: number;
-        sizes: [
-          {
-            height: number;
-            width: number;
-            sourceUrl: string;
-          },
-        ];
-      };
+      mediaDetails: MediaDetails;
     };
   };
 }

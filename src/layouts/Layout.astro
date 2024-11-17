@@ -3,10 +3,8 @@ import Navbar from "../components/Navbar.astro";
 import Footer from "../components/Footer.astro";
 import ConsentScripts from "../components/ConsentScripts.astro";
 import PrivacyBanner from "../components/PrivacyBanner.astro";
-import logo from "../images/logo.png";
-import favicon from "../images/favicon.png";
-import "../styles/tailwind.css";
 import { pages } from "../utils/fetchData";
+import MetaHeadings from "../components/MetaHeadings.astro";
 
 interface Props {
   title: string;
@@ -17,31 +15,7 @@ const { title } = Astro.props;
 
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <!-- Primary Meta Tags -->
-    <title>Slow Dating Berlin</title>
-    <meta name="title" content="Slow Dating Berlin" />
-    <meta name="description" content="Meet cool new people IRL." />
-
-    <!-- Open Graph / Facebook -->
-    <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://slowdatingbln.com" />
-    <meta property="og:title" content="Slow Dating Berlin" />
-    <meta property="og:description" content="Meet cool new people IRL." />
-    <meta property="og:image" content={logo.src} />
-
-    <!-- Twitter -->
-    <meta property="twitter:card" content="summary_large_image" />
-    <meta property="twitter:url" content="https://slowdatingbln.com" />
-    <meta property="twitter:title" content="Slow Dating Berlin" />
-    <meta property="twitter:description" content="Meet cool new people IRL." />
-    <meta property="twitter:image" content={logo.src} />
-    <meta name="viewport" content="width=device-width" />
-    <link rel="icon" type="image/svg+xml" href={favicon.src} />
-    <meta name="generator" content={Astro.generator} />
-    <title>{title}</title>
-  </head>
+  <MetaHeadings {title} />
   <body class="bg-themeColor font-poppins flex flex-col min-h-screen">
     <nav>
       <Navbar pages={pages} />
@@ -49,54 +23,18 @@ const { title } = Astro.props;
     <main class="container mx-auto mb-10">
       <slot />
     </main>
-  </body><Footer />
-  <PrivacyBanner />
-  <!--Notification area-->
-  <div
-    aria-live="assertive"
-    class="pointer-events-none fixed inset-0 flex items-end px-4 py-6 sm:items-start sm:p-6"
-  >
-    <div class="flex w-full flex-col items-center space-y-4 sm:items-end">
-      <div
-        id="notification"
-        class="hidden pointer-events-auto w-full max-w-sm overflow-hidden rounded-lg bg-white shadow-lg ring-1 ring-black ring-opacity-5"
-      >
-        <div class="p-4">
-          <div class="flex items-start">
-            <div class="flex-shrink-0" id="notification-icon">
-              <!-- Notification icon placeholder -->
-            </div>
-            <div class="ml-3 w-0 flex-1 pt-0.5">
-              <p
-                id="notification-message"
-                class="text-sm font-medium text-gray-900"
-              >
-                Notification message
-              </p>
-            </div>
-            <div class="ml-4 flex flex-shrink-0">
-              <button
-                type="button"
-                class="inline-flex rounded-md bg-white text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-                id="notification-button"
-              >
-                <span class="sr-only">Close</span>
-                <svg
-                  class="h-5 w-5"
-                  viewBox="0 0 20 20"
-                  fill="currentColor"
-                  aria-hidden="true"
-                >
-                  <path
-                    d="M6.28 5.22a.75.75 0 00-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 101.06 1.06L10 11.06l3.72 3.72a.75.75 0 101.06-1.06L11.06 10l3.72-3.72a.75.75 0 00-1.06-1.06L10 8.94 6.28 5.22z"
-                  ></path>
-                </svg>
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-  <ConsentScripts />
+    <Footer />
+    <PrivacyBanner />
+  </body>
 </html>
+
+<ConsentScripts />
+
+<style>
+  figure {
+    max-width: 80%;
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+  }
+</style>
