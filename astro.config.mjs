@@ -10,8 +10,12 @@ export default defineConfig({
    experimental: {
       env: {
          schema: {
-            GRAPHQL_ENDPOINT: envField.string({ context: "client", access: "public", optional: false })
-         }
-      }
-   }
+            GRAPHQL_ENDPOINT: envField.string({
+               context: "client",
+               access: "public",
+               optional: false,
+            }),
+         },
+      },
+   },
 });

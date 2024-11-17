@@ -3,10 +3,10 @@ import { CardMapper } from "./CardMapper.ts";
 import { GRAPHQL_ENDPOINT } from "astro:env/client";
 
 const batchedData = await fetch(`${GRAPHQL_ENDPOINT}`, {
-  method: "POST",
-  headers: { "Content-Type": "application/json" },
-  body: JSON.stringify({
-    query: `
+   method: "POST",
+   headers: { "Content-Type": "application/json" },
+   body: JSON.stringify({
+      query: `
       query BatchedQueries($meetupName: String!, $blogName: String!) {
         meetupPosts: posts(where: {categoryName: $meetupName}) {
           nodes {
@@ -98,11 +98,11 @@ const batchedData = await fetch(`${GRAPHQL_ENDPOINT}`, {
         }
       }
     `,
-    variables: {
-      blogName: "blog",
-      meetupName: "meetups",
-    },
-  }),
+      variables: {
+         blogName: "blog",
+         meetupName: "meetups",
+      },
+   }),
 });
 
 const { data } = await batchedData.json();
