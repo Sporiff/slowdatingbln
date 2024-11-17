@@ -21,9 +21,9 @@ const { title, cards, id } = Astro.props as CarouselProps;
     data-cards={cards.length}
   >
     {
-      cards.map((card) => (
+      cards.map((card, index) => (
         <div class="xs:min-w-full sm:min-w-1/3 lg:min-w-auto flex-shrink-0">
-          <Card {...card} />
+          <Card {...card} lazy={index < 4 ? false : true} />
         </div>
       ))
     }

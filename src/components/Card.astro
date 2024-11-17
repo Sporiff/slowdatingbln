@@ -1,7 +1,12 @@
 ---
 import { Image } from "astro:assets";
 
+interface CardOptions extends CardProps {
+  lazy: boolean;
+}
+
 const {
+  lazy,
   imageSrc,
   href,
   heading,
@@ -9,12 +14,18 @@ const {
   date,
   width = 300,
   height = 300,
-} = Astro.props as CardProps;
+} = Astro.props as CardOptions;
 ---
 
 <a href={href} class="block w-full" style={`max-width: ${width}px`}>
   <div class="bg-white rounded-lg overflow-hidden">
-    <Image src={imageSrc} alt={heading} {width} {height} loading="lazy" />
+    <Image
+      src={imageSrc}
+      alt={heading}
+      {width}
+      {height}
+      loading={lazy ? "lazy" : "eager"}
+    />
     <div class="p-4 h-52">
       <h3 class="text-lg font-semibold">{heading}</h3>
       <p class="text-gray-500 text-sm">{date}</p>
