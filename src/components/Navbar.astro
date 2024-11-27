@@ -67,13 +67,48 @@ const orderedData = pages.sort((a: PageItem, b: PageItem) => {
       >
     </div>
   </nav>
-  <MobileNavbar {orderedData} />
+  <MobileNavbar orderedData={orderedData} />
 </header>
 
 <script>
-  import { MobileMenuToggle } from "./utils/MobileMenuToggle";
+  type MenuState = {
+    isOpen: boolean;
+    toggleButton: HTMLButtonElement;
+    closeButton: HTMLButtonElement;
+    mobileMenu: HTMLElement;
+  }
+
+  function createMenuController (toggleButtonId: string, closeButtonId: string, mobileMenuId: string) {
+    const toggleButton = document.getElementById(toggleButtonId) as HTMLButtonElement;
+    const closeButton = document.getElementById(closeButtonId) as HTMLButtonElement;
+    const mobileMenu = document.getElementById(mobileMenuId);
+
+    if (!mobileMenu || !closeButton || !mobileMenu) throw new Error("No mobile menu found.")
+
+    const state: MenuState = {
+      isOpen: false,
+      toggleButton,
+      closeButton,
+      mobileMenu,
+    };
+
+    const toggleMenu = (): void => {
+      state.mobileMenu.classList.toggle("hidden");
+    };
+
+    const init = (): void => {
+      state.closeButton.addEventListener("click", toggleMenu);
+      state.toggleButton.addEventListener("click", toggleMenu);
+    };
+
+    init();
+
+    return {
+      toggleMenu
+    }
+  }
 
   document.addEventListener("DOMContentLoaded", () => {
-    new MobileMenuToggle("menu-button", "close-button", "mobile-menu");
+    createMenuController("menu-button", "close-button", "mobile-menu");
   });
 </script>

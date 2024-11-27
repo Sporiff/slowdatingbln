@@ -23,7 +23,7 @@ const { title, cards, id } = Astro.props as CarouselProps;
     {
       cards.map((card, index) => (
         <div class="xs:min-w-full sm:min-w-1/3 lg:min-w-auto flex-shrink-0">
-          <Card {...card} lazy={index < 4 ? false : true} />
+          <Card {...card} lazy={index >= 4} />
         </div>
       ))
     }
@@ -43,15 +43,94 @@ const { title, cards, id } = Astro.props as CarouselProps;
 </div>
 
 <script>
-  import { CarouselController } from "./utils/CarouselController";
   const carousels = Array.from(
     document.querySelectorAll(".carousel.container")
   );
 
+  type CarouselState = {
+    carouselId: string;
+    carousel: HTMLElement | null;
+    prevBtn: HTMLElement | null;
+    nextBtn: HTMLElement | null;
+    cardCount: number;
+    cardWidth: number;
+    currentIndex: number;
+    visibleCards: number;
+  };
+
+  function createCarouselController(id: string) {
+    const carousel = document.getElementById(`${id}-track`);
+    const prevBtn = document.getElementById(`${id}-prevBtn`);
+    const nextBtn = document.getElementById(`${id}-nextBtn`);
+
+    const state: CarouselState = {
+      carouselId: id,
+      carousel,
+      prevBtn,
+      nextBtn,
+      cardCount: carousel ? Number(carousel.dataset["cards"] || 0) : 0,
+      cardWidth: carousel?.firstElementChild ? (carousel.firstElementChild as HTMLElement).clientWidth : 0,
+      currentIndex: 0,
+      visibleCards: 1,
+    };
+
+    const updateDimensions = () => {
+      if (!state.carousel) return;
+
+      const firstCard = state.carousel.firstElementChild as HTMLElement | null;
+      state.cardWidth = firstCard ? firstCard.clientWidth : 0;
+      state.visibleCards = Math.floor(state.carousel.clientWidth / state.cardWidth);
+      updateButtons();
+    };
+
+    const updateButtons = () => {
+      if (!state.prevBtn || !state.nextBtn) return;
+
+      state.prevBtn.classList.toggle("hidden", state.currentIndex === 0);
+      state.nextBtn.classList.toggle(
+          "hidden",
+          state.currentIndex >= state.cardCount - state.visibleCards
+      );
+    };
+
+    const moveCarousel = (direction: number) => {
+      if (!state.carousel) return;
+
+      const newIndex = state.currentIndex + direction;
+      if (newIndex >= 0 && newIndex <= state.cardCount - state.visibleCards) {
+        state.currentIndex = newIndex;
+        state.carousel.style.transform = `translateX(-${state.currentIndex * state.cardWidth}px)`;
+        updateButtons();
+      }
+    };
+
+    const init = () => {
+      if (!state.carousel || !state.prevBtn || !state.nextBtn) {
+        console.warn(`Carousel with id ${state.carouselId} is missing required elements.`);
+        return;
+      }
+
+      globalThis.addEventListener("resize", updateDimensions);
+      state.prevBtn.addEventListener("click", () => moveCarousel(-1));
+      state.nextBtn.addEventListener("click", () => moveCarousel(1));
+      updateDimensions();
+      updateButtons();
+    };
+
+    init();
+
+    return {
+      updateDimensions,
+      moveCarousel,
+      updateButtons,
+    };
+  }
+
+
   document.addEventListener("DOMContentLoaded", () => {
     for (const carousel of carousels) {
       let carouselEl = carousel as HTMLElement;
-      new CarouselController(carouselEl.dataset.carouselId!);
+      createCarouselController(carouselEl.dataset.carouselId!);
     }
   });
 </script>

@@ -37,7 +37,7 @@ export const expectedMeetup: CardProps = {
    heading: "Test meetup",
    excerpt: "<p>A test meetup</p>\n",
    href: "/events/test-meetup",
-   date: "Thu, 5 December 2024",
+   date: "Thu 5 December 2024",
    imageSrc: "https://upload.wikimedia.org/wikipedia/commons/b/bd/Test.svg",
    height: 300,
    width: 300,
@@ -82,11 +82,11 @@ export const expectedPost: CardProps = {
    heading: "Test blog post",
    excerpt: "<p>A test blog post</p>\n",
    href: "/blog/test-blog-post",
-   date: "Thu, 5 December 2024",
+   date: "Thu 5 December 2024",
    imageSrc: "https://upload.wikimedia.org/wikipedia/commons/b/bd/Test.svg",
    height: 300,
    width: 300,
 };
 
 export const dummyDate = "2024-12-05T19:30:00+00:00";
-export const expectedDate = "Thu, 5 December 2024";
+export const expectedDate = "Thu 5 December 2024";
