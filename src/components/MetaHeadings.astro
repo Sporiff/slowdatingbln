@@ -14,21 +14,21 @@ const { title } = Astro.props;
   <meta charset="UTF-8" />
 
   <!-- Primary Meta Tags -->
-  <title>Slow Dating Berlin</title>
-  <meta name="title" content="Slow Dating Berlin" />
+  <title>{title}</title>
+  <meta name="title" content={title} />
   <meta name="description" content="Meet cool new people IRL." />
 
   <!-- Open Graph / Facebook -->
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://slowdatingbln.com" />
-  <meta property="og:title" content="Slow Dating Berlin" />
+  <meta property="og:title" content={title} />
   <meta property="og:description" content="Meet cool new people IRL." />
   <meta property="og:image" content={logo.src} />
 
   <!-- Twitter -->
   <meta property="twitter:card" content="summary_large_image" />
   <meta property="twitter:url" content="https://slowdatingbln.com" />
-  <meta property="twitter:title" content="Slow Dating Berlin" />
+  <meta property="twitter:title" content={title} />
   <meta property="twitter:description" content="Meet cool new people IRL." />
   <meta property="twitter:image" content={logo.src} />
   <meta name="viewport" content="width=device-width" />
@@ -36,5 +36,4 @@ const { title } = Astro.props;
   <meta name="generator" content={Astro.generator} />
 
   <Icons />
-  <title>{title}</title>
 </head>
