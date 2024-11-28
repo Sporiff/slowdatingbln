@@ -7,7 +7,7 @@ const batchedData = await fetch(`${GRAPHQL_ENDPOINT}`, {
    body: JSON.stringify({
       query: `
       query BatchedQueries($meetupName: String!, $blogName: String!) {
-         meetupPosts: posts(where: {categoryName: $meetupName}) {
+         meetupPosts: posts(where: {categoryName: $meetupName, orderby: {field: DATE, order: ASC}}) {
             nodes {
                id: databaseId
                slug
