@@ -6,10 +6,10 @@
       "preview": "deno run -A npm:astro preview"
    },
    "imports": {
-      "@astrojs/tailwind": "npm:@astrojs/tailwind@^5.1.4",
-      "@tailwindcss/typography": "npm:@tailwindcss/typography@^0.5.15",
-      "astro": "npm:astro@^5.1.2",
-      "tailwindcss": "npm:tailwindcss@^3.4.17"
+      "@astrojs/tailwind": "npm:@astrojs/tailwind@^6.0.0",
+      "@tailwindcss/typography": "npm:@tailwindcss/typography@^0.5.16",
+      "astro": "npm:astro@^5.2.5",
+      "tailwindcss": "npm:tailwindcss@^4.0.6"
    },
    "nodeModulesDir": "auto",
    "fmt": {
