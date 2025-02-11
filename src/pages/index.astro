@@ -4,7 +4,7 @@ import { meetupCards, postCards } from "../utils/fetchData";
 import Carousel from "../components/Carousel.astro";
 ---
 
-<Layout title="Slow dating Berlin">
+<Layout title="Slow Dating Berlin">
   {
     meetupCards.length > 0 && (
       <Carousel title="Upcoming Events" cards={meetupCards} id="event-carousel" />
